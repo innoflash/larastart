@@ -1,0 +1,26 @@
+{
+    "name": "innoflash/larastart",
+    "description": "This is the package to give access to common API functions",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "innoflash",
+            "email": "innocentmazando@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "InnoFlash\\LaraStart\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "InnoFlash\\LaraStart\\Providers\\LaraStartServiceProvider"
+            ]
+        }
+    }
+}
