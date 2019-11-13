@@ -10,9 +10,9 @@
 composer require innoflash/larastart
 ```
 
-## Usage
+# Usage
 
-### #API Responses
+## #API Responses
 This used for manipulating API JSON responses for ```success/fail``` calls
 
 * You can simply use for like:
@@ -54,7 +54,7 @@ and this gets you a response with status 200
 ![Response image](images/response_message.png)
 
 
-### ExceptionsTrait
+## ExceptionsTrait
 This is to override Laravel error logging do that we sent all type of errors to our API clients
 
 * You can simply set it up by using the ExceptionsTrait in your ```Exceptions\Handler class```
@@ -133,15 +133,15 @@ class AuthController extends Controller
 ```JSON
 {
     "user": {
-        "id": id,
-        "first_name": first_name,
-        "last_name": last_name,
-        "email": email,
-        "email_verified_at": _date_
+        "id": 1,
+        "first_name": "first_name",
+        "last_name": "last_name",
+        "email": "email",
+        "email_verified_at": "_date_"
     },
     "token": {
-        "access_token": ~access token~,
-        "expires_in": expires_in
+        "access_token": "~access token~",
+        "expires_in": "expires_in"
     }
 }
 ```
@@ -173,4 +173,185 @@ return [
      */
     'guard' => 'web'
 ];
+```
+
+## CRUD Service
+This is meant to simplify the most CRUD operations
+
+#### SETUP
+Just create a ```model service class``` and extend ```CRUDServices ```
+
+```php
+<?php
+
+namespace App\Services;
+
+use InnoFlash\LaraStart\Services\CRUDServices;
+
+class ModelService extends CRUDServices
+{
+    private $task;
+    function __construct(Model $model)
+    {
+        if (request()->has('model_id'))
+            $this->model = Task::findOrFail(request('model_id'));
+        else $this->model = $model;
+    }
+```
+* commonly this is the best way to wire the constructor because we will have to inject the service into the controller and this should get our model on the fly
+
+* ```CRUDServices``` is abstract so you will need to override the 2 abstract methods to get the service setup
+
+```php
+/**
+     * Makes a list of fields that you do not want to be sent
+     * to the create or update methods
+     * Its mainly the fields that you do not have in the model table
+     */
+    function getUnsetFields()
+    {
+        return ['model_id'];
+    }
+
+```
+```php
+    /**
+     * This returns the model found in the constructor 
+     * or an instance of the class if no model is found
+     */
+    function getModel()
+    {
+        return $this->model;
+    }
+```
+
+* Almost done, you now need to inject your service class into the controller as follows
+
+```php
+class ModelController extends Controller
+{
+    private $modelService;
+    function __construct(TaskService $modelService)
+    {
+        $this->modelService = $modelService;
+    }
+```
+
+Good to go, now let`s see how to run crud functions here
+
+##### SELECT QUERY
+```php
+    /**
+     * How to get the selected model
+     */
+    return $this->modelService->getModel();
+
+    /**
+     * Query for multiple results
+     * 
+     * You are still open to run default model query like
+     */
+    return Model::all();
+
+     /** 
+     * but since the service is can inject the model into the 
+     * request we can run it as 
+     */
+    return $this->modelService->getModel()->all(); 
+```
+
+##### DELETE QUERY
+```php
+public function delete(DeleteRequest $request)
+{
+    /**
+     * Since the service is injected into the controller it
+     * knows exactly what model to target so calling destroy
+     * automates a precise delete
+     * 
+     * You can pass a custom delete message or leave as is
+     */
+    return $this->modelService->destroy('custom delete message');
+}
+````
+
+##### UPDATE QUERY
+```php
+public function update(UpdateRequest $request)
+{
+    /**
+     * You just have to sent the right model id and the 
+     * service finds the model and updates the model
+     * 
+     * $params is highly likely to be the validated input
+     * 
+     * You can override the update success message by adding 
+     * a message param as a second param
+     * return {
+     *              success: true,
+     *              message: 'model updated'
+     *        }
+     */
+    return $this->modelService->update($params);
+}
+```
+##### CREATE QUERY
+```php
+public function create(CreateRequest $request)
+{
+    /**
+     * the create method takes an array for params so we are just gonna
+     * set the validated values from our request
+     * 
+     * This return the a default response 
+     * {
+     *      success: true,
+     *      message: "model created"
+     * }
+     */ 
+    return $this->modelService->create($request->validated());
+
+    /**
+     * You can override the output message by passing a second parameter
+     */
+    return $this->modelService->create($request->validated(), 'custom message');
+
+    /**
+     * If you want to get the created object you must add another boolean param and set it to true to get the object
+     * This returns the object as is
+     */
+        return $this->modelService->create($request->validated(), 'custom message', true);
+}
+```
+
+##### SPECIAL CREATE QUERY
+Oftenly we would wanna create models based on a model they belong to. You will need to override the ```getParentRelationship()``` in the ```ModelService::class``` (overriding the CRUDService class method)
+
+```php
+/**
+     * Attaches a parent to the current model
+     */
+    function getParentRelationship()
+    {
+        /**
+         * For example you want to create a comment for a post
+         * You will need to initialize the post($parentObject)
+         *  and call the relationship it has to the current model(relationshipToModel)
+         */
+        return $parentObject->relationshipToModel();
+
+        /**
+         * Mainly i have been using to attach a relationship to the authenticated user
+         */
+        return auth('guard')->user()->relationshipToModel();
+    }
+```
+When the service is setup now you can do the create function
+
+```php
+    public function create(CreateRequest $request)
+    {
+        //where $params is the validated input
+        return $this->taskService->createFromRelationship($params, 'Task created!');
+    }
 ```
