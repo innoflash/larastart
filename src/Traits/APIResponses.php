@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace InnoFlash\LaraStart\Traits;
 
 trait APIResponses
 {
