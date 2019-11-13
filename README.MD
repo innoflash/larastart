@@ -7,7 +7,7 @@ composer require innoflash/larastart
 
 ## Usage
 
-### API Responses
+### #API Responses
 This used for manipulating API JSON responses for ```success/fail``` calls
 
 * You can simply use for like:
@@ -49,7 +49,7 @@ and this gets you a response with status 200
 ![Response image](images/response_message.png)
 
 
-### ExceptionsTrait
+### #ExceptionsTrait
 This is to override Laravel error logging do that we sent all type of errors to our API clients
 
 * You can simply set it up by using the ExceptionsTrait in your ```Exceptions\Handler class```
