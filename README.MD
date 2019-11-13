@@ -12,11 +12,32 @@ This used for manipulating API JSON responses for ```success/fail``` calls
 
 * You can simply use for like:
 
-![Generic image](images/generic_api_trait.png)
+```php
+<?php
+
+use InnoFlash\LaraStart\Traits\APIResponses;
+
+class ClassName
+{
+    use APIResponses;
+```
 
 * Usage on all your controllers
 
-![API image](images/controller_api.png)
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use InnoFlash\LaraStart\Traits\APIResponses;
+...
+
+class Controller extends BaseController
+{
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use APIResponses;
+}
+```
 
 #### Calling the functions
 ```php
@@ -33,11 +54,28 @@ This is to override Laravel error logging do that we sent all type of errors to 
 
 * You can simply set it up by using the ExceptionsTrait in your ```Exceptions\Handler class```
 
-![Response image](images/exceptions_init.png)
+```php
+<?php
+
+namespace App\Exceptions;
+
+use Exception;
+use InnoFlash\LaraStart\Traits\ExceptionsTrait;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+
+class Handler extends ExceptionHandler
+{
+    use ExceptionsTrait;
+```
 
 * Now override the render function
 
-![Exceptions image](images/exceptions_setup.png)
+```php
+    public function render($request, Exception $exception)
+    {
+        return $this->apiExceptions($request, $exception);
+    }
+```
 
 * This overrides all errors and format 
 
