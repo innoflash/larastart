@@ -19,7 +19,7 @@ trait ExceptionsTrait
     function apiExceptions(Request $request, Exception $exception, bool $rawError = false)
     {
         if ($rawError)
-            return $exception;
+            return parent::render($request, $exception);
         else {
             if ($exception instanceof ModelNotFoundException) {
                 $errorBody = [
