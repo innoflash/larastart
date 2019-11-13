@@ -29,7 +29,7 @@ class AuthService
     }
     public function proxy($grantType, array $data = [])
     {
-        $class = get_class(config('larastart.resource'));
+        $class = config('larastart.resource');
 
         $postData = array_merge($data, [
             'grant_type' => $grantType,
@@ -58,7 +58,7 @@ class AuthService
     }
     public function authenticatedUser()
     {
-        $class = get_class(config('larastart.resource'));
+        $class = config('larastart.resource');
         return new $class(auth()->user());
     }
     public function validationFailed()

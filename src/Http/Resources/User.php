@@ -1,6 +1,6 @@
 <?php
 
-namespace InnoFlas\LaraStart\Http\Resources;
+namespace InnoFlash\LaraStart\Http\Resources;
 
 
 use Illuminate\Http\Resources\Json\JsonResource;
