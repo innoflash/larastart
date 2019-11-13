@@ -1,5 +1,9 @@
 # LaraStart
 
+## Table of contents
+* [API Respones](#api-responses)
+* [Exception Traits](#exceptiontrait)
+
 ## Installation
 ```sh
 composer require innoflash/larastart
@@ -49,7 +53,7 @@ and this gets you a response with status 200
 ![Response image](images/response_message.png)
 
 
-### #ExceptionsTrait
+### ExceptionsTrait
 This is to override Laravel error logging do that we sent all type of errors to our API clients
 
 * You can simply set it up by using the ExceptionsTrait in your ```Exceptions\Handler class```
