@@ -2,7 +2,8 @@
 
 ## Table of contents
 * [API Respones](#api-responses)
-* [Exception Traits](#exceptiontrait)
+* [Exception Traits](#exceptionstrait)
+* [Auth Service](#authservice)
 
 ## Installation
 ```sh
