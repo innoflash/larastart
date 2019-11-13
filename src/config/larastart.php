@@ -11,7 +11,6 @@ return [
      */
     'limit' => 15,
 
-
     /**
      * Sets the default guard you want to use in the auth service
      */

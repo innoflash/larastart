@@ -122,3 +122,50 @@ class AuthController extends Controller
         return $this->authService->attemptLogin();
     }
 ```
+
+#### OUTPUT
+
+```JSON
+{
+    "user": {
+        "id": id,
+        "first_name": first_name,
+        "last_name": last_name,
+        "email": email,
+        "email_verified_at": _date_
+    },
+    "token": {
+        "access_token": ~access token~,
+        "expires_in": expires_in
+    }
+}
+```
+
+#### CUSTOMIZATION
+If you want to customize the the results you need to publish the config file
+
+```php
+php artisan vendor:publish --tag=larastart-config
+```
+and this copies the ```larastart.php``` into you config folder
+
+* Edit the file to suit your needs
+
+```php
+return [
+    /**
+     * Replace this login resource with your own if you have it
+     */
+    'resource' => \InnoFlash\LaraStart\Http\Resources\User::class,
+
+    /**
+     * Sets the default limit for paginated items
+     */
+    'limit' => 15,
+
+    /**
+     * Sets the default guard you want to use in the auth service
+     */
+    'guard' => 'web'
+];
+```
