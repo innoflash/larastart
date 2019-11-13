@@ -12,7 +12,7 @@ class AuthService
     {
         if (!sizeof($credentials))
             $credentials = request(['email', 'password']);
-        if (!auth()->attempt($credentials))
+        if (!auth(config('larastart.guard'))->attempt($credentials))
             return $this->validationFailed();
 
         return $this->proxy('password', [
@@ -49,7 +49,7 @@ class AuthService
         } else
             return $this->validationFailed();
         return [
-            'user' => new $class(auth()->user()),
+            'user' => new $class(auth(config('larastart.guard'))->user()),
             'token' => [
                 'access_token' => $results->access_token,
                 'expires_in' => $results->expires_in,
@@ -59,7 +59,7 @@ class AuthService
     public function authenticatedUser()
     {
         $class = config('larastart.resource');
-        return new $class(auth()->user());
+        return new $class(auth(config('larastart.guard'))->user());
     }
     public function validationFailed()
     {

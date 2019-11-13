@@ -9,5 +9,11 @@ return [
     /**
      * Sets the default limit for paginated items
      */
-    'limit' => 15
+    'limit' => 15,
+
+
+    /**
+     * Sets the default guard you want to use in the auth service
+     */
+    'guard' => 'web'
 ];

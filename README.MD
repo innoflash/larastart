@@ -85,3 +85,40 @@ If you want the default error rendering
 ```php
 return $this->apiExceptions($request, $exception, true); //true triggers the default error
 ```
+
+### #AuthService
+* This one helps handle logging in and fetching the user access token. 
+* Works really well with [Laravel Passport](https://laravel.com/docs/passport)
+
+#### SETUP
+In the ```.env``` file you will need to add these clients
+
+```.env
+CLIENT_ID={client_id}
+CLIENT_SECRET={client_secret}
+```
+
+Then in your ```AuthenticationController``` you will need to inject the ```AuthService``` class in it
+
+```php
+use InnoFlash\LaraStart\Services\AuthService;
+
+class AuthController extends Controller
+{
+    private $authService;
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+```
+
+#### USAGE
+* This is how simple you will call when you need the our desired results
+* You can make the same call if you want login the user after registering
+
+```php
+    function login(LoginRequest $request)
+    {
+        return $this->authService->attemptLogin();
+    }
+```
