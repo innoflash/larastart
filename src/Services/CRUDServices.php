@@ -15,11 +15,13 @@ abstract class CRUDServices
      * @return mixed
      */
     abstract function getUnsetFields();
+
     /**
      * This get the model value or class of the model in the service
      * @return mixed
      */
     abstract function getModel();
+
     /**
      * This gets the relationship of the given model to the parent
      * @return mixed
@@ -28,6 +30,10 @@ abstract class CRUDServices
     {
         return null;
     }
+
+    /**
+     * Deletes the model from the database
+     */
     function destroy(string $message = 'Deleted successful!')
     {
         try {
@@ -37,6 +43,10 @@ abstract class CRUDServices
             abort(500, $e->getMessage());
         }
     }
+
+    /**
+     * Updates the model with the given filtered attributes
+     */
     function update(array $attributes, string $message = 'Update successful!')
     {
         try {
@@ -46,6 +56,10 @@ abstract class CRUDServices
             abort(500, $e->getMessage());
         }
     }
+
+    /**
+     * Creates a new model with the given filtered attributes
+     */
     function create(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
         try {
@@ -58,6 +72,10 @@ abstract class CRUDServices
             abort(500, $e->getMessage());
         }
     }
+
+    /**
+     * Creates a new model from the given parent relationship
+     */
     function createFromRelationship(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
         $class = get_class($this->getModel());
@@ -73,10 +91,17 @@ abstract class CRUDServices
         }
     }
 
+    /**
+     * Creates a new model from the given parent relationship
+     */
     function createFromParent(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
         return $this->createFromRelationship($attributes, $message, $returnObject);
     }
+
+    /**
+     * This removes unwanted fields from the incoming create/update requests
+     */
     protected function optimizeAttributes(array $attributes)
     {
         if (is_string($this->getUnsetFields()))
@@ -88,6 +113,9 @@ abstract class CRUDServices
         return $attributes;
     }
 
+    /**
+     * Retrieves the parent to child relationship between this model and its parent
+     */
     private function getParent()
     {
         if (\is_object($this->getParentRelationship())) return $this->getParentRelationship();
