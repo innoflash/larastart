@@ -36,4 +36,13 @@ class Helper
         $pieces = \explode('/', $newName);
         return $pieces[sizeof($pieces) - 1];
     }
+
+    public static function getDirName(string $fullname): string
+    {
+        $newName = \str_replace(['\\', '/', '//'], '/', $fullname);
+        $pieces = \explode('/', $newName);
+        $pieces = array_pop($pieces);
+        if (sizeof($pieces)) return implode('/', $pieces);
+        else return '';
+    }
 }

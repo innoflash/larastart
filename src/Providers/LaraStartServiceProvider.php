@@ -3,6 +3,7 @@
 namespace InnoFlash\LaraStart\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use InnoFlash\LaraStart\Console\Commands\MakeServiceCommand;
 
 class LaraStartServiceProvider extends ServiceProvider
 {
@@ -14,9 +15,15 @@ class LaraStartServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/larastart.php', 'larastart');
-        $this->publishes([
-            __DIR__ . '/../config/larastart.php' => config_path('larastart.php')
-        ], 'larastart-config');
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../config/larastart.php' => config_path('larastart.php')
+            ], 'larastart-config');
+
+            $this->commands([
+                MakeServiceCommand::class
+            ]);
+        }
     }
 
     /**

@@ -190,7 +190,7 @@ use InnoFlash\LaraStart\Services\CRUDServices;
 
 class ModelService extends CRUDServices
 {
-    private $task;
+    private $model;
     function __construct(Model $model)
     {
         if (request()->has('model_id'))

@@ -1,0 +1,56 @@
+<?php   
+namespace App\Services;
+
+use InnoFlash\LaraStart\Services\CRUDServices;
+use App\$namespaceModelName;
+
+class $service_name extends CRUDServices
+{
+    private $modelObject;
+    function __construct(ModelName $modelObject)
+    {
+        if (request()->has('modelObject_id'))
+            $this->modelObject = ModelName::findOrFail(request('modelObject_id'));
+        else $this->modelObject = $modelObject;
+    }
+
+    /**
+     * Get the value of modelObject
+     */
+    public function getModelName() : ModelName
+    {
+        return $this->modelObject;
+    }
+
+    /**
+     * Makes a list of fields that you do not want to be sent
+     * to the create or update methods
+     * Its mainly the fields that you do not have in the model table
+     */
+    function getUnsetFields()
+    {
+        return ['modelObject_id'];
+    }
+
+    /**
+     * This returns the model found in the constructor 
+     * or an instance of the class if no model is found
+     */
+    function getModel()
+    {
+        return $this->getModelName();
+    }
+
+
+    /**
+     * Attaches a parent to the current model
+     * You can delete this if you do not intent to create models from parent relationships
+     */
+    function getParentRelationship()
+    {
+        return [
+            Parent::class,
+            'relationshipName',
+        ];
+    }
+}
