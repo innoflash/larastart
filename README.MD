@@ -176,53 +176,13 @@ return [
 ```
 
 ## CRUD Service
-This is meant to simplify the most CRUD operations
+This is meant to simplify the most CRUD operations and its best done by generating some service classes in the ```app/Services``` directory
 
 #### SETUP
-Just create a ```model service class``` and extend ```CRUDServices ```
+Just create run an artisan command to create the ```ServiceClass``` and customize all you want if the boilder plate is not sufficient for you
 
-```php
-<?php
-
-namespace App\Services;
-
-use InnoFlash\LaraStart\Services\CRUDServices;
-
-class ModelService extends CRUDServices
-{
-    private $model;
-    function __construct(Model $model)
-    {
-        if (request()->has('model_id'))
-            $this->model = Task::findOrFail(request('model_id'));
-        else $this->model = $model;
-    }
-```
-* commonly this is the best way to wire the constructor because we will have to inject the service into the controller and this should get our model on the fly
-
-* ```CRUDServices``` is abstract so you will need to override the 2 abstract methods to get the service setup
-
-```php
-/**
-     * Makes a list of fields that you do not want to be sent
-     * to the create or update methods
-     * Its mainly the fields that you do not have in the model table
-     */
-    function getUnsetFields()
-    {
-        return ['model_id'];
-    }
-
-```
-```php
-    /**
-     * This returns the model found in the constructor 
-     * or an instance of the class if no model is found
-     */
-    function getModel()
-    {
-        return $this->model;
-    }
+```sh
+php artisan make:service {ServiceName} --model={ModelName}
 ```
 
 * Almost done, you now need to inject your service class into the controller as follows
@@ -231,7 +191,7 @@ class ModelService extends CRUDServices
 class ModelController extends Controller
 {
     private $modelService;
-    function __construct(TaskService $modelService)
+    function __construct(ModelService $modelService)
     {
         $this->modelService = $modelService;
     }
