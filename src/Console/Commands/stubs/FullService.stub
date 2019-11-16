@@ -1,21 +1,22 @@
 <?php   
-namespace App\Services;
+namespace App\Services$servicePackage;
 
 use InnoFlash\LaraStart\Services\CRUDServices;
-use App\$namespaceModelName;
+use Illuminate\Database\Eloquent\Model as ParentModel;
+use $namespaceModelName;
 
-class $service_name extends CRUDServices
+class $filename extends CRUDServices
 {
     private $modelObject;
     function __construct(ModelName $modelObject)
     {
-        if (request()->has('modelObject_id'))
-            $this->modelObject = ModelName::findOrFail(request('modelObject_id'));
+        if (request()->has('model_object_id'))
+            $this->modelObject = ModelName::findOrFail(request('model_object_id'));
         else $this->modelObject = $modelObject;
     }
 
     /**
-     * Get the value of modelObject
+     * Retrives an instance of modelObject
      */
     public function getModelName() : ModelName
     {
@@ -25,16 +26,16 @@ class $service_name extends CRUDServices
     /**
      * Makes a list of fields that you do not want to be sent
      * to the create or update methods
-     * Its mainly the fields that you do not have in the model table
+     * Its mainly the fields that you do not have in the modelObjects table
      */
     function getUnsetFields()
     {
-        return ['modelObject_id'];
+        return ['model_object_id'];
     }
 
     /**
      * This returns the model found in the constructor 
-     * or an instance of the class if no model is found
+     * or an instance of the class if no modelObject is found
      */
     function getModel()
     {
@@ -43,13 +44,13 @@ class $service_name extends CRUDServices
 
 
     /**
-     * Attaches a parent to the current model
-     * You can delete this if you do not intent to create models from parent relationships
+     * Attaches a parent to the current modelObject
+     * You can delete this if you do not intent to create modelObjects from parent relationships
      */
     function getParentRelationship()
     {
         return [
-            Parent::class,
+            ParentModel::class,
             'relationshipName',
         ];
     }

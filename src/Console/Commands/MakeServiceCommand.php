@@ -2,6 +2,7 @@
 
 namespace InnoFlash\LaraStart\Console\Commands;
 
+use Illuminate\Support\Str;
 use InnoFlash\LaraStart\Console\Commands\Helpers\MakeFile;
 use InnoFlash\LaraStart\Http\Helper;
 
@@ -12,7 +13,7 @@ class MakeServiceCommand extends MakeFile
      *
      * @var string
      */
-    protected $signature = 'make:service {service: The name of the service class with path too} {--m|model: The model to attach to the service}';
+    protected $signature = 'make:service {name : The name of the service class with path too} {--model= : The model to attach to the service}';
 
     /**
      * The console command description.
@@ -23,7 +24,7 @@ class MakeServiceCommand extends MakeFile
 
     function getStub()
     {
-        if ($this->hasArgument('service'))
+        if ($this->hasArgument('name'))
             return __DIR__ . '/stubs/FullService.stub';
         else return __DIR__ . '/stubs/PlainService.stub';
     }
@@ -35,16 +36,11 @@ class MakeServiceCommand extends MakeFile
 
     function getFilename()
     {
-        return Helper::getFileName($this->argument('service')) . '.php';
+        return Helper::getFileName($this->argument('name')) . '.php';
     }
 
     function getPath()
     {
-        return \app_path('Services/' . Helper::getDirName($this->argument('service')));
-    }
-
-    function handle()
-    {
-        dd($this->getArguments());
+        return \app_path('Services/' . Helper::getDirName($this->argument('name')));
     }
 }

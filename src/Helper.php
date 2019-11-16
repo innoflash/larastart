@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 
 class Helper
 {
+
+    public static $strRlc = [
+        '/',
+        '//',
+        '\\',
+        '\\\\',
+    ];
+
     /**
      * Gets the limit set in the request or returns a default set in the config
      */
@@ -32,17 +40,24 @@ class Helper
 
     public static function getFileName(string $fullname): string
     {
-        $newName = \str_replace(['\\', '/', '//'], '/', $fullname);
+        $newName = \str_replace(self::$strRlc, '/', $fullname);
         $pieces = \explode('/', $newName);
         return $pieces[sizeof($pieces) - 1];
     }
 
-    public static function getDirName(string $fullname): string
+    public static function getDirName(string $fullname, bool $includeSlash = false): string
     {
-        $newName = \str_replace(['\\', '/', '//'], '/', $fullname);
+        $newName = \str_replace(self::$strRlc, '/', $fullname);
         $pieces = \explode('/', $newName);
-        $pieces = array_pop($pieces);
-        if (sizeof($pieces)) return implode('/', $pieces);
-        else return '';
+        array_pop($pieces);
+        if (sizeof($pieces)) {
+            if ($includeSlash) return '\\' . implode('\\', $pieces);
+            else return implode('\\', $pieces);
+        } else return '';
+    }
+
+    public static function getModelNamespace(string $modelName): string
+    {
+        return 'App\\' . \str_replace(self::$strRlc, '\\', $modelName);
     }
 }

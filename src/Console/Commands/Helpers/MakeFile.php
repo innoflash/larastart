@@ -2,7 +2,9 @@
 
 namespace InnoFlash\LaraStart\Console\Commands\Helpers;
 
+use Illuminate\Support\Str;
 use Illuminate\Console\Command;
+use InnoFlash\LaraStart\Http\Helper;
 use Illuminate\Filesystem\Filesystem;
 
 abstract class MakeFile extends Command
@@ -60,13 +62,16 @@ abstract class MakeFile extends Command
         return [
             'LowerCaseDumyVendor',
             'LowerCaseDummyPackageName',
-            'StudlyDummyVendor',
-            'StudlyDummyPackageName',
             'KebabDummyVendor',
-            'KebabDummyPakageName',
             'DummyAuthorName',
             'DummyAuthorEmail',
-            'DummyFileName'
+            'DummyFileName',
+            '$servicePackage',
+            '$namespaceModelName',
+            '$filename',
+            'modelObject',
+            'model_object',
+            'ModelName'
         ];
     }
     protected function replaceContent()
@@ -76,13 +81,16 @@ abstract class MakeFile extends Command
         return [
             strtolower($vendor),
             strtolower($packageName),
-            studly_case($vendor),
-            studly_case($packageName),
             $vendor,
-            kebab_case($packageName),
             cache()->get('author_name'),
             cache()->get('author_email'),
-            $this->hasArgument('filename') ? $this->argument('filename') : false
+            $this->hasArgument('filename') ? $this->argument('filename') : false,
+            Helper::getDirName($this->argument('name'), true),
+            Helper::getModelNamespace($this->option('model')),
+            Helper::getFileName($this->argument('name')),
+            Str::camel(Helper::getFileName($this->option('model'))),
+            \str_replace('-', '_', Str::kebab(Helper::getFileName($this->option('model')))),
+            Helper::getFileName($this->option('model')),
         ];
     }
 }
