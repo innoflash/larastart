@@ -4,6 +4,7 @@
 * [API Respones](#api-responses)
 * [Exception Traits](#exceptionstrait)
 * [Auth Service](#authservice)
+* [CRUD Services](#crud-service)
 
 ## Installation
 ```sh
@@ -176,7 +177,12 @@ return [
 ```
 
 ## CRUD Service
-This is meant to simplify the most CRUD operations and its best done by generating some service classes in the ```app/Services``` directory
+This is meant to simplify the most CRUD operations and its best done by generating some service classes in the ```app/Services``` directory. 
+The services handle basic
+* Create
+* Update
+* Delete
+* Select
 
 #### SETUP
 Just create run an artisan command to create the ```ServiceClass``` and customize all you want if the boilder plate is not sufficient for you
