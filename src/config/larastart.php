@@ -19,5 +19,5 @@ return [
     /**
      * Sets the key to the resource above
      */
-    '_key' => 'user'
+    'wrap' => 'user'
 ];

@@ -338,10 +338,17 @@ Oftenly we would wanna create models based on a model they belong to. You will n
          * You will need to initialize the post($parentObject)
          *  and call the relationship it has to the current model(relationshipToModel)
          */
-        return $parentObject->relationshipToModel();
+        return [
+            ParentModel::class, //parent model of the model to be created
+            'relationshipName', //relationship name in parent model
+            'foreign_key', //OPTIONAL fK in new model or default is used
+        ];
 
         /**
-         * Mainly i have been using to attach a relationship to the authenticated user
+         * Mainly i have been using to attach a relationship to the 
+         * authenticated user
+         * If you already have the parent object call the relationship
+         * for this as shown in the example below
          */
         return auth('guard')->user()->relationshipToModel();
     }
@@ -352,6 +359,6 @@ When the service is setup now you can do the create function
     public function create(CreateRequest $request)
     {
         //where $params is the validated input
-        return $this->taskService->createFromRelationship($params, 'Task created!');
+        return $this->taskService->createFromParent($params, 'Task created!');
     }
 ```

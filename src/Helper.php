@@ -29,4 +29,11 @@ class Helper
             'time' => $date->format('H:i:s')
         ];
     }
+
+    public static function getFileName(string $fullname): string
+    {
+        $newName = \str_replace(['\\', '/', '//'], '/', $fullname);
+        $pieces = \explode('/', $newName);
+        return $pieces[sizeof($pieces) - 1];
+    }
 }

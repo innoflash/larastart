@@ -49,7 +49,7 @@ class AuthService
         } else
             return $this->validationFailed();
         return [
-            config('larastart._key') => new $class(auth(config('larastart.guard'))->user()),
+            config('larastart.wrap') => new $class(auth(config('larastart.guard'))->user()),
             'token' => [
                 'access_token' => $results->access_token,
                 'expires_in' => $results->expires_in,
