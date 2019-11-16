@@ -30,9 +30,10 @@ abstract class MakeFile extends Command
     protected function makeFile()
     {
         $this->makeDir();
-        // if (!$this->filesystem->isFile($this->getPath() . '/' . $this->getFilename())) {
-        return $this->filesystem->put($this->getPath() . '/' . $this->getFilename(), $this->getReplaceContent());
-        // }
+        if (!$this->filesystem->isFile($this->getPath() . '/' . $this->getFilename())) {
+            $this->warn(Helper::getFileName($this->argument('name')) . ' created');
+            return $this->filesystem->put($this->getPath() . '/' . $this->getFilename(), $this->getReplaceContent());
+        } else $this->warn(Helper::getFileName($this->argument('name')) . ' already exist');
     }
     /**
      * @return bool
@@ -70,8 +71,6 @@ abstract class MakeFile extends Command
     }
     protected function replaceContent()
     {
-        $vendor      = cache()->get('vendor');
-        $packageName = cache()->get('package_name');
         return [
             Helper::getDirName($this->argument('name'), true),
             Helper::getModelNamespace($this->option('model')),
