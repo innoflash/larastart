@@ -60,12 +60,6 @@ abstract class MakeFile extends Command
     protected function stringsToReplace()
     {
         return [
-            'LowerCaseDumyVendor',
-            'LowerCaseDummyPackageName',
-            'KebabDummyVendor',
-            'DummyAuthorName',
-            'DummyAuthorEmail',
-            'DummyFileName',
             '$servicePackage',
             '$namespaceModelName',
             '$filename',
@@ -79,12 +73,6 @@ abstract class MakeFile extends Command
         $vendor      = cache()->get('vendor');
         $packageName = cache()->get('package_name');
         return [
-            strtolower($vendor),
-            strtolower($packageName),
-            $vendor,
-            cache()->get('author_name'),
-            cache()->get('author_email'),
-            $this->hasArgument('filename') ? $this->argument('filename') : false,
             Helper::getDirName($this->argument('name'), true),
             Helper::getModelNamespace($this->option('model')),
             Helper::getFileName($this->argument('name')),
