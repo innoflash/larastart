@@ -45,13 +45,19 @@ trait ExceptionsTrait
                     'code' => 'MET_05',
                     'message' => $exception->getMessage(),
                 ];
-            else if ($exception instanceof ValidationException)
+            else if ($exception instanceof ValidationException) {
+                $messages = [];
+                foreach ($exception->errors() as $key => $error) {
+                    foreach ($error as $key => $err) {
+                        array_push($messages, $err);
+                    }
+                }
                 $errorBody = [
                     'status' => Response::HTTP_UNPROCESSABLE_ENTITY,
                     'code' => 'VAL_22',
-                    'message' => $exception->errors(),
+                    'message' => implode(PHP_EOL, $messages),
                 ];
-            else if ($exception instanceof BadRequestHttpException)
+            } else if ($exception instanceof BadRequestHttpException)
                 $errorBody = [
                     'status' => Response::HTTP_BAD_REQUEST,
                     'code' => 'VAL_22',
