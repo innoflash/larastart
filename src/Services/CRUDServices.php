@@ -50,11 +50,11 @@ abstract class CRUDServices
     function update(array $attributes, string $message = 'Update successful!', bool $returnObject = false)
     {
         try {
-            $model = $this->getModel()->update($this->optimizeAttributes($attributes));
+            $this->getModel()->update($this->optimizeAttributes($attributes));
             if (!$returnObject)
                 return $this->successResponse($message);
             else
-                return $model;
+                return $this->getModel();
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
