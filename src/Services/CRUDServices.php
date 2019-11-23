@@ -47,7 +47,7 @@ abstract class CRUDServices
     /**
      * Updates the model with the given filtered attributes, return the updated object if @* @param $returnObject
      */
-    function update(array $attributes, string $message = 'Update successful!', bool $returnObject)
+    function update(array $attributes, string $message = 'Update successful!', bool $returnObject = false)
     {
         try {
             $model = $this->getModel()->update($this->optimizeAttributes($attributes));
