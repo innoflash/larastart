@@ -203,6 +203,17 @@ class ModelController extends Controller
     }
 ```
 
+* If you are going to use the ```ModelService``` in more than one class ie. the controller (and you wanna use it in requests and resources and wherever) you will have to add the ```ModelService``` into the ```AppServiceProvider``` as a singleton so that the app does not have rerun querying the model
+
+```php
+//your app/Providers/AppServiceProvider.php
+
+public function register()
+{
+    $this->app->singleton(ModelService::class, ModelService::class);
+}
+```
+
 Good to go, now let`s see how to run crud functions here
 
 ##### SELECT QUERY

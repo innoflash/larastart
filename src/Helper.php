@@ -2,6 +2,7 @@
 
 namespace InnoFlash\LaraStart\Http;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class Helper
