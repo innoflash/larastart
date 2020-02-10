@@ -17,7 +17,12 @@ return [
     'guard' => 'web',
 
     /**
-     * Sets the min length of a password for login and account creation
+     * Sets the key to the resource above
+     */
+    'wrap' => 'user',
+
+    /**
+     * Sets the default length for a password
      */
     'password_min_length' => 6
 ];

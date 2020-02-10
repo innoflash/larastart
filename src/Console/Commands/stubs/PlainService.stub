@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Services$servicePackage;
+
+class $filename
+{
+    public function __construct()
+    {
+        # code...
+    }
+}

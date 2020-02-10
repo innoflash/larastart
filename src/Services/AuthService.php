@@ -15,11 +15,14 @@ class AuthService
         if (!auth(config('larastart.guard'))->attempt($credentials))
             return $this->validationFailed();
 
+        if (!is_object($credentials)) $credentials = (object) $credentials;
+
         return $this->proxy('password', [
-            'username' => request()->email,
-            'password' => request()->password
+            'username' => $credentials->email,
+            'password' => $credentials->password
         ]);
     }
+
     public function attemptRefresh()
     {
         $refreshToken = request()->cookie(self::REFRESH_TOKEN);
@@ -27,6 +30,7 @@ class AuthService
             'refresh_token' => $refreshToken
         ]);
     }
+
     public function proxy($grantType, array $data = [])
     {
         $class = config('larastart.resource');
@@ -49,18 +53,20 @@ class AuthService
         } else
             return $this->validationFailed();
         return [
-            'user' => new $class(auth(config('larastart.guard'))->user()),
+            config('larastart.wrap') => new $class(auth(config('larastart.guard'))->user()),
             'token' => [
                 'access_token' => $results->access_token,
                 'expires_in' => $results->expires_in,
             ]
         ];
     }
+
     public function authenticatedUser()
     {
         $class = config('larastart.resource');
         return new $class(auth(config('larastart.guard'))->user());
     }
+
     public function validationFailed()
     {
         abort(401, 'Invalid login credentials');
