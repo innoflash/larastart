@@ -14,5 +14,10 @@ return [
     /**
      * Sets the default guard you want to use in the auth service
      */
-    'guard' => 'web'
+    'guard' => 'web',
+
+    /**
+     * Sets the min length of a password for login and account creation
+     */
+    'password_min_length' => 6
 ];

@@ -3,6 +3,7 @@
 namespace InnoFlash\LaraStart\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
 
 class LaraStartServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,8 @@ class LaraStartServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/larastart.php' => config_path('larastart.php')
         ], 'larastart-config');
+
+        Passport::routes();
     }
 
     /**
