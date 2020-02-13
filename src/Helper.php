@@ -35,7 +35,7 @@ class Helper
             'approx' => $date->diffForHumans(),
             'formatted' => $date->format('D d M Y'),
             'exact' => $date,
-            'time' => $date->format('H:i:s')
+            'time' => $date->format('H:i')
         ];
     }
 
