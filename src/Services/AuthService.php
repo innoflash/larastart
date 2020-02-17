@@ -12,8 +12,6 @@ class AuthService
     {
         if (!sizeof($credentials))
             $credentials = request(['email', 'password']);
-        if (!auth(config('larastart.guard'))->attempt($credentials))
-            return $this->validationFailed();
 
         if (!is_object($credentials)) $credentials = (object) $credentials;
 
@@ -48,17 +46,17 @@ class AuthService
             'post'
         );
         $response = Route::dispatch($tokenRequest);
-        if ($response->getStatusCode() == 200) {
+        if ($response->getStatusCode() === 200) {
             $results = json_decode($response->getContent());
-        } else
-            return $this->validationFailed();
-        return [
-            config('larastart.wrap') => new $class(auth(config('larastart.guard'))->user()),
-            'token' => [
-                'access_token' => $results->access_token,
-                'expires_in' => $results->expires_in,
-            ]
-        ];
+            return [
+                config('larastart.wrap') => new $class(auth(config('larastart.guard'))->user()),
+                'token' => [
+                    'access_token' => $results->access_token,
+                    'expires_in' => $results->expires_in,
+                ]
+            ];
+        }
+        return $this->validationFailed();
     }
 
     public function authenticatedUser()
