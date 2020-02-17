@@ -26,7 +26,7 @@ abstract class CRUDServices
      * This gets the relationship of the given model to the parent
      * @return mixed
      */
-    function getParentRelationship()
+    public function getParentRelationship()
     {
         return null;
     }
@@ -34,7 +34,7 @@ abstract class CRUDServices
     /**
      * Deletes the model from the database
      */
-    function destroy(string $message = 'Deleted successful!')
+    public function destroy(string $message = 'Deleted successful!')
     {
         try {
             $this->getModel()->delete();
@@ -47,10 +47,11 @@ abstract class CRUDServices
     /**
      * Updates the model with the given filtered attributes
      */
-    function update(array $attributes, string $message = 'Update successful!')
+    public function update(array $attributes, string $message = 'Update successful!', bool $returnObject = false)
     {
         try {
             $this->getModel()->update($this->optimizeAttributes($attributes));
+            if ($returnObject) return $this->getModel();
             return $this->successResponse($message);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
@@ -60,14 +61,13 @@ abstract class CRUDServices
     /**
      * Creates a new model with the given filtered attributes
      */
-    function create(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
+    public function create(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
         try {
             $model = $this->getModel()->create($this->optimizeAttributes($attributes));
-            if (!$returnObject)
-                return $this->successResponse($message);
-            else
+            if ($returnObject)
                 return $model;
+            return $this->successResponse($message);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -76,16 +76,15 @@ abstract class CRUDServices
     /**
      * Creates a new model from the given parent relationship
      */
-    function createFromRelationship(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
+    public function createFromRelationship(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
         $class = get_class($this->getModel());
         $model = new $class($this->optimizeAttributes($attributes));
         try {
             $this->getParent()->save($model);
-            if (!$returnObject)
-                return $this->successResponse($message);
-            else
+            if ($returnObject)
                 return $model;
+            return $this->successResponse($message);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -94,7 +93,7 @@ abstract class CRUDServices
     /**
      * Creates a new model from the given parent relationship
      */
-    function createFromParent(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
+    public function createFromParent(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
         return $this->createFromRelationship($attributes, $message, $returnObject);
     }
