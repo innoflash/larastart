@@ -13,6 +13,9 @@ class AuthService
         if (!sizeof($credentials))
             $credentials = request(['email', 'password']);
 
+        if (!auth(config('larastart.guard'))->attempt($credentials))
+            return $this->validationFailed();
+
         if (!is_object($credentials)) $credentials = (object) $credentials;
 
         return $this->proxy('password', [
