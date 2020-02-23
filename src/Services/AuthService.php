@@ -2,70 +2,37 @@
 
 namespace InnoFlash\LaraStart\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
 class AuthService
 {
     const REFRESH_TOKEN = 'refreshToken';
-    public function attemptLogin(array $credentials = [])
+    public function attemptLogin(array $credentials = [], string $guard = 'api')
     {
         if (!sizeof($credentials))
             $credentials = request(['email', 'password']);
 
-        if (!auth(config('larastart.guard'))->attempt($credentials))
+        if (!$guard) $guard = config('larastart.guard');
+
+        if (!$token = auth($guard)->attempt($credentials))
             return $this->validationFailed();
 
-        if (!is_object($credentials)) $credentials = (object) $credentials;
-
-        return $this->proxy('password', [
-            'username' => $credentials->email,
-            'password' => $credentials->password
-        ]);
+        $class = config('larastart.resource');
+        return [
+            config('larastart.wrap') => new $class(auth($guard)->user()),
+            'token' => [
+                'access_token' => $token,
+                'expires_in' => auth($guard)->factory()->getTTL() * 60,
+                'type' => 'bearer'
+            ]
+        ];
     }
 
-    public function attemptRefresh()
-    {
-        $refreshToken = request()->cookie(self::REFRESH_TOKEN);
-        return $this->proxy('refresh_token', [
-            'refresh_token' => $refreshToken
-        ]);
-    }
-
-    public function proxy($grantType, array $data = [])
+    public function authenticatedUser(string $guard = 'api')
     {
         $class = config('larastart.resource');
 
-        $postData = array_merge($data, [
-            'grant_type' => $grantType,
-            'client_id' => env('CLIENT_ID', 2),
-            'client_secret' => env('CLIENT_SECRET'),
-            'scope' => '*',
-        ]);
-        $request = app()->make('request');
-        $request->request->add($postData);
-        $tokenRequest = Request::create(
-            env('APP_URL') . '/oauth/token',
-            'post'
-        );
-        $response = Route::dispatch($tokenRequest);
-        if ($response->getStatusCode() === 200) {
-            $results = json_decode($response->getContent());
-            return [
-                config('larastart.wrap') => new $class(auth(config('larastart.guard'))->user()),
-                'token' => [
-                    'access_token' => $results->access_token,
-                    'expires_in' => $results->expires_in,
-                ]
-            ];
-        }
-        return $this->validationFailed();
-    }
+        if (!$guard) $guard = config('larastart.guard');
 
-    public function authenticatedUser()
-    {
-        $class = config('larastart.resource');
-        return new $class(auth(config('larastart.guard'))->user());
+        return new $class(auth($guard)->user());
     }
 
     public function validationFailed()

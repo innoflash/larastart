@@ -14,7 +14,7 @@ return [
     /**
      * Sets the default guard you want to use in the auth service
      */
-    'guard' => 'web',
+    'guard' => 'api',
 
     /**
      * Sets the key to the resource above

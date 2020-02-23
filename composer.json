@@ -12,7 +12,7 @@
     "minimum-stability": "dev",
     "require": {
         "illuminate/support": "^5.1|^6.0",
-        "laravel/passport": "^7.4"
+        "tymon/jwt-auth": "^1.0.0-rc.5.1",
     },
     "require-dev": {
         "phpunit/phpunit": "^7.4@dev",
