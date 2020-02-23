@@ -67,7 +67,7 @@ abstract class CRUDServices
             $model = $this->getModel()->create($this->optimizeAttributes($attributes));
             if ($returnObject)
                 return $model;
-            return $this->successResponse($message);
+            return $this->successResponse($message, [], 201);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -84,7 +84,7 @@ abstract class CRUDServices
             $this->getParent()->save($model);
             if ($returnObject)
                 return $model;
-            return $this->successResponse($message);
+            return $this->successResponse($message, [], 201);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
