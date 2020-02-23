@@ -104,6 +104,12 @@ Run the command below to get the key into your ```.env``` file
 php artisan jwt:secret
 ```
 
+By default JWT tokens live for 60 minutes so if you want to alter the lifespan add the following in the ```.env``` file
+```env
+JWT_TTL => time_in_minutes
+```
+
+
 Then in your ```AuthenticationController``` you will need to inject the ```AuthService``` class in it
 
 ```php
@@ -179,7 +185,7 @@ return [
     /**
      * Sets the default guard you want to use in the auth service
      */
-    'guard' => 'web'
+    'guard' => 'api'
 ];
 ```
 
