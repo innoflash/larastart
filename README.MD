@@ -97,11 +97,11 @@ return $this->apiExceptions($request, $exception, true); //true triggers the def
 * Works really well with [Laravel Passport](https://laravel.com/docs/passport)
 
 #### SETUP
-In the ```.env``` file you will need to add these clients
+In the ```.env``` file you will need to add JWT secret key.
+Run the command below to get the key into your ```.env``` file
 
-```.env
-CLIENT_ID={client_id}
-CLIENT_SECRET={client_secret}
+```sh
+php artisan jwt:secret
 ```
 
 Then in your ```AuthenticationController``` you will need to inject the ```AuthService``` class in it
@@ -128,7 +128,13 @@ class AuthController extends Controller
         return $this->authService->attemptLogin();
     }
 ```
-
+If you are using multi-auth you will need to pass the guard you are using for authentication
+```php
+function login(LoginRequest $request)
+    {
+        return $this->authService->attemptLogin([], 'your-guard);
+    }
+```
 #### OUTPUT
 
 ```JSON
@@ -142,7 +148,8 @@ class AuthController extends Controller
     },
     "token": {
         "access_token": "~access token~",
-        "expires_in": "expires_in"
+        "expires_in": "expires_in",
+        "type": "bearer"
     }
 }
 ```
