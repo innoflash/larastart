@@ -1,4 +1,4 @@
-<?php   
+<?php
 namespace App\Services$servicePackage;
 
 use InnoFlash\LaraStart\Services\CRUDServices;
@@ -7,7 +7,8 @@ use $namespaceModelName;
 
 class $filename extends CRUDServices
 {
-    private $modelObject;
+    private ModelName $modelObject;
+
     public function __construct(ModelName $modelObject)
     {
         if (request()->has('model_object_id'))
@@ -16,7 +17,7 @@ class $filename extends CRUDServices
     }
 
     /**
-     * Retrives an instance of modelObject
+     * Retrieves an instance of modelObject
      */
     public function getModelName() : ModelName
     {
@@ -34,7 +35,7 @@ class $filename extends CRUDServices
     }
 
     /**
-     * This returns the model found in the constructor 
+     * This returns the model found in the constructor
      * or an instance of the class if no modelObject is found
      */
     public function getModel()

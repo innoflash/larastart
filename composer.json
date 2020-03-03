@@ -11,6 +11,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
+        "php": "^7.4",
         "illuminate/support": "^5.1|^6.0",
         "tymon/jwt-auth": "^1.0.0-rc.5.1"
     },
