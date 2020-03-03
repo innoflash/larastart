@@ -10,6 +10,7 @@ use InvalidArgumentException;
 abstract class CRUDServices
 {
     use APIResponses;
+
     /**
      * This sets the attributes to be removed from the given set for updating or creating
      * @return mixed
@@ -45,7 +46,12 @@ abstract class CRUDServices
     }
 
     /**
-     * Updates the model with the given filtered attributes
+     *  Updates the model with the given filtered attributes
+     *
+     * @param array $attributes
+     * @param string $message
+     * @param bool $returnObject
+     * @return \Illuminate\Http\JsonResponse|mixed
      */
     public function update(array $attributes, string $message = 'Update successful!', bool $returnObject = false)
     {
@@ -60,6 +66,11 @@ abstract class CRUDServices
 
     /**
      * Creates a new model with the given filtered attributes
+     *
+     * @param array $attributes
+     * @param string $message
+     * @param bool $returnObject
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
@@ -75,8 +86,13 @@ abstract class CRUDServices
 
     /**
      * Creates a new model from the given parent relationship
+     *
+     * @param array $attributes
+     * @param string $message
+     * @param bool $returnObject
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function createFromRelationship(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
+    private function createFromRelationship(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
         $class = get_class($this->getModel());
         $model = new $class($this->optimizeAttributes($attributes));
@@ -92,6 +108,11 @@ abstract class CRUDServices
 
     /**
      * Creates a new model from the given parent relationship
+     *
+     * @param array $attributes
+     * @param string $message
+     * @param bool $returnObject
+     * @return \Illuminate\Http\JsonResponse
      */
     public function createFromParent(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
@@ -100,6 +121,9 @@ abstract class CRUDServices
 
     /**
      * This removes unwanted fields from the incoming create/update requests
+     *
+     * @param array $attributes
+     * @return array
      */
     protected function optimizeAttributes(array $attributes)
     {

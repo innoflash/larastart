@@ -10,14 +10,19 @@ use Illuminate\Filesystem\Filesystem;
 abstract class MakeFile extends Command
 {
     abstract public function getStub();
+
     abstract public function getFilename();
+
     abstract public function getPath();
+
     protected $filesystem;
+
     public function __construct(Filesystem $filesystem)
     {
         parent::__construct();
         $this->filesystem = $filesystem;
     }
+
     /**
      * Execute the console command.
      *
@@ -27,6 +32,7 @@ abstract class MakeFile extends Command
     {
         $this->makeFile();
     }
+
     protected function makeFile()
     {
         $this->makeDir();
@@ -35,6 +41,7 @@ abstract class MakeFile extends Command
             return $this->filesystem->put($this->getPath() . '/' . $this->getFilename(), $this->getReplaceContent());
         } else $this->warn(Helper::getFileName($this->argument('name')) . ' already exist');
     }
+
     /**
      * @return bool
      */
@@ -44,10 +51,12 @@ abstract class MakeFile extends Command
             return $this->filesystem->makeDirectory($this->getPath(), 0755, true);
         }
     }
+
     protected function getContent()
     {
         return $this->filesystem->get($this->getStub());
     }
+
     protected function getReplaceContent()
     {
         $content = $this->getContent();
@@ -58,6 +67,7 @@ abstract class MakeFile extends Command
         );
         return $content;
     }
+
     protected function stringsToReplace()
     {
         return [
@@ -69,6 +79,7 @@ abstract class MakeFile extends Command
             'ModelName'
         ];
     }
+
     protected function replaceContent()
     {
         return [

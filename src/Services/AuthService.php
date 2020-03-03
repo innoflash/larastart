@@ -4,7 +4,6 @@ namespace InnoFlash\LaraStart\Services;
 
 class AuthService
 {
-    const REFRESH_TOKEN = 'refreshToken';
     public function attemptLogin(array $credentials = [], string $guard = 'api')
     {
         if (!sizeof($credentials))
