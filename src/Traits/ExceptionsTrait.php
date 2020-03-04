@@ -2,7 +2,6 @@
 
 namespace InnoFlash\LaraStart\Traits;
 
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -16,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 trait ExceptionsTrait
 {
 
-    function apiExceptions(Request $request, Exception $exception, bool $rawError = false)
+    function apiExceptions(Request $request, $exception, bool $rawError = false)
     {
         if ($rawError)
             return parent::render($request, $exception);
