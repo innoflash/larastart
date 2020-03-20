@@ -76,6 +76,7 @@ abstract class CRUDServices
     {
         try {
             $model = $this->getModel()->create($this->optimizeAttributes($attributes));
+
             if ($returnObject)
                 return $model;
             return $this->successResponse($message, [], 201);
@@ -84,27 +85,6 @@ abstract class CRUDServices
         }
     }
 
-    /**
-     * Creates a new model from the given parent relationship
-     *
-     * @param array $attributes
-     * @param string $message
-     * @param bool $returnObject
-     * @return \Illuminate\Http\JsonResponse
-     */
-    private function createFromRelationship(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
-    {
-        $class = get_class($this->getModel());
-        $model = new $class($this->optimizeAttributes($attributes));
-        try {
-            $this->getParent()->save($model);
-            if ($returnObject)
-                return $model;
-            return $this->successResponse($message, [], 201);
-        } catch (\Exception $e) {
-            abort(500, $e->getMessage());
-        }
-    }
 
     /**
      * Creates a new model from the given parent relationship
@@ -116,7 +96,17 @@ abstract class CRUDServices
      */
     public function createFromParent(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
-        return $this->createFromRelationship($attributes, $message, $returnObject);
+        $class = get_class($this->getModel());
+        $model = new $class($this->optimizeAttributes($attributes));
+
+        try {
+            $this->getParent()->save($model);
+            if ($returnObject)
+                return $model;
+            return $this->successResponse($message, [], 201);
+        } catch (\Exception $e) {
+            abort(500, $e->getMessage());
+        }
     }
 
     /**
@@ -129,6 +119,7 @@ abstract class CRUDServices
     {
         if (is_string($this->getUnsetFields()))
             unset($attributes[$this->getUnsetFields()]);
+
         if (is_array($this->getUnsetFields()))
             foreach ($this->getUnsetFields() as $field) {
                 unset($attributes[$field]);
@@ -145,11 +136,13 @@ abstract class CRUDServices
         else if (\is_array($this->getParentRelationship())) {
             $class = $this->getParentRelationship()['0'];
             $relationship = $this->getParentRelationship()['1'];
+
             if (sizeof($this->getParentRelationship()) > 2) $parent = $class::findOrFail(request($this->getParentRelationship()['2']));
             else {
                 $_class = new $class();
                 $parent = $class::findOrFail(request($_class->getForeignKey()));
             }
+
             return $parent->$relationship();
         } else throw new InvalidArgumentException('You have set an invalid parent for this model');
     }
