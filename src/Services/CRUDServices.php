@@ -22,7 +22,8 @@ abstract class CRUDServices
     abstract function getModel();
 
     /**
-     * This gets the relationship of the given model to the parent
+     * This gets the relationship of the given model to the parent.
+     *
      * @return mixed
      */
     public function getParentRelationship()
@@ -31,7 +32,10 @@ abstract class CRUDServices
     }
 
     /**
-     * Deletes the model from the database
+     * Deletes the model from the database.
+     *
+     * @param string $message
+     * @return
      */
     public function destroy(string $message = 'Deleted successful!')
     {
