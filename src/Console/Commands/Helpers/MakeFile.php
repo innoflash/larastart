@@ -2,9 +2,10 @@
 
 namespace InnoFlash\LaraStart\Console\Commands\Helpers;
 
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
-use InnoFlash\LaraStart\Http\Helper;
+use InnoFlash\LaraStart\Helper;
 use Illuminate\Filesystem\Filesystem;
 
 abstract class MakeFile extends Command
@@ -54,7 +55,10 @@ abstract class MakeFile extends Command
 
     protected function getContent()
     {
-        return $this->filesystem->get($this->getStub());
+        try {
+            return $this->filesystem->get($this->getStub());
+        } catch (FileNotFoundException $e) {
+        }
     }
 
     protected function getReplaceContent()

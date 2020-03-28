@@ -2,9 +2,8 @@
 
 namespace InnoFlash\LaraStart\Console\Commands;
 
-use Illuminate\Support\Str;
 use InnoFlash\LaraStart\Console\Commands\Helpers\MakeFile;
-use InnoFlash\LaraStart\Http\Helper;
+use InnoFlash\LaraStart\Helper;
 
 class MakeServiceCommand extends MakeFile
 {

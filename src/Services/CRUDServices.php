@@ -2,8 +2,6 @@
 
 namespace InnoFlash\LaraStart\Services;
 
-use Illuminate\Support\Str;
-use InnoFlash\LaraStart\Http\Helper;
 use InnoFlash\LaraStart\Traits\APIResponses;
 use InvalidArgumentException;
 
