@@ -15,6 +15,7 @@ class LoginRequest extends FormRequest
     {
         return true;
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,7 +25,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => 'required|email',
-            'password' => 'required|string|min:' . config('larastart.password_min_length', 6)
+            'password' => 'required|string|min:'.config('larastart.password_min_length', 6),
         ];
     }
 }

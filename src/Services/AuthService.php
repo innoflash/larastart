@@ -6,22 +6,27 @@ class AuthService
 {
     public function attemptLogin(array $credentials = [], string $guard = 'api')
     {
-        if (!sizeof($credentials))
+        if (! count($credentials)) {
             $credentials = request(['email', 'password']);
+        }
 
-        if (!$guard) $guard = config('larastart.guard');
+        if (! $guard) {
+            $guard = config('larastart.guard');
+        }
 
-        if (!$token = auth($guard)->attempt($credentials))
+        if (! $token = auth($guard)->attempt($credentials)) {
             return $this->validationFailed();
+        }
 
         $class = config('larastart.resource');
+
         return [
             config('larastart.wrap') => new $class(auth($guard)->user()),
             'token' => [
                 'access_token' => $token,
                 'expires_in' => auth($guard)->factory()->getTTL() * 60,
-                'type' => 'bearer'
-            ]
+                'type' => 'bearer',
+            ],
         ];
     }
 
@@ -29,7 +34,9 @@ class AuthService
     {
         $class = config('larastart.resource');
 
-        if (!$guard) $guard = config('larastart.guard');
+        if (! $guard) {
+            $guard = config('larastart.guard');
+        }
 
         return new $class(auth($guard)->user());
     }
