@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class Helper
 {
-
     public static $strRlc = [
         '/',
         '//',
@@ -23,8 +22,11 @@ class Helper
      */
     public static function getLimit(Request $request)
     {
-        if ($request->has('limit')) return $request->limit;
-        else return config('larastart.limit');
+        if ($request->has('limit')) {
+            return $request->limit;
+        } else {
+            return config('larastart.limit');
+        }
     }
 
     /**
@@ -35,13 +37,15 @@ class Helper
      */
     public static function getDates($date)
     {
-        if (!$date instanceof Carbon)
+        if (! $date instanceof Carbon) {
             $date = Carbon::parse($date);
+        }
+
         return [
             'approx' => $date->diffForHumans(),
             'formatted' => $date->format('D d M Y'),
             'exact' => $date,
-            'time' => $date->format('H:i')
+            'time' => $date->format('H:i'),
         ];
     }
 
@@ -55,7 +59,8 @@ class Helper
     {
         $newName = \str_replace(self::$strRlc, '/', $fullname);
         $pieces = \explode('/', $newName);
-        return $pieces[sizeof($pieces) - 1];
+
+        return $pieces[count($pieces) - 1];
     }
 
     /**
@@ -70,14 +75,19 @@ class Helper
         $newName = \str_replace(self::$strRlc, '/', $fullname);
         $pieces = \explode('/', $newName);
         array_pop($pieces);
-        if (sizeof($pieces)) {
-            if ($includeSlash) return '\\' . implode('\\', $pieces);
-            else return implode('\\', $pieces);
-        } else return '';
+        if (count($pieces)) {
+            if ($includeSlash) {
+                return '\\'.implode('\\', $pieces);
+            } else {
+                return implode('\\', $pieces);
+            }
+        } else {
+            return '';
+        }
     }
 
     public static function getModelNamespace(string $modelName): string
     {
-        return 'App\\' . \str_replace(self::$strRlc, '\\', $modelName);
+        return 'App\\'.\str_replace(self::$strRlc, '\\', $modelName);
     }
 }

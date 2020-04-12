@@ -14,37 +14,36 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait ExceptionsTrait
 {
-
-    function apiExceptions(Request $request, $exception, bool $rawError = false)
+    public function apiExceptions(Request $request, $exception, bool $rawError = false)
     {
-        if ($rawError)
+        if ($rawError) {
             return parent::render($request, $exception);
-        else {
+        } else {
             if ($exception instanceof ModelNotFoundException) {
                 $errorBody = [
                     'status' => Response::HTTP_NOT_FOUND,
                     'code' => 'MOD_04',
                     'message' => $exception->getMessage(),
                 ];
-            } else if ($exception instanceof NotFoundHttpException)
+            } elseif ($exception instanceof NotFoundHttpException) {
                 $errorBody = [
                     'status' => Response::HTTP_NOT_FOUND,
                     'code' => 'RT_04',
                     'message' => 'Invalid route',
                 ];
-            else if ($exception instanceof InvalidArgumentException)
+            } elseif ($exception instanceof InvalidArgumentException) {
                 $errorBody = [
                     'status' => Response::HTTP_NOT_ACCEPTABLE,
                     'code' => 'AUT_01',
                     'message' => 'Authorization code is empty.',
                 ];
-            else if ($exception instanceof MethodNotAllowedHttpException)
+            } elseif ($exception instanceof MethodNotAllowedHttpException) {
                 $errorBody = [
                     'status' => Response::HTTP_METHOD_NOT_ALLOWED,
                     'code' => 'MET_05',
                     'message' => $exception->getMessage(),
                 ];
-            else if ($exception instanceof ValidationException) {
+            } elseif ($exception instanceof ValidationException) {
                 $messages = [];
                 foreach ($exception->errors() as $key => $error) {
                     foreach ($error as $key => $err) {
@@ -56,24 +55,26 @@ trait ExceptionsTrait
                     'code' => 'VAL_22',
                     'message' => implode(PHP_EOL, $messages),
                 ];
-            } else if ($exception instanceof BadRequestHttpException)
+            } elseif ($exception instanceof BadRequestHttpException) {
                 $errorBody = [
                     'status' => Response::HTTP_BAD_REQUEST,
                     'code' => 'VAL_22',
                     'message' => $exception->getMessage(),
                 ];
-            else if ($exception instanceof AuthorizationException)
+            } elseif ($exception instanceof AuthorizationException) {
                 $errorBody = [
                     'status' => Response::HTTP_FORBIDDEN,
                     'code' => 'AUT_02',
                     'message' => $exception->getMessage(),
                 ];
-            else
+            } else {
                 $errorBody = [
                     'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
                     'code' => 'SER_00',
                     'message' => $exception->getMessage(),
                 ];
+            }
+
             return \response()->json($errorBody, $errorBody['status']);
         }
     }

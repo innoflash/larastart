@@ -2,11 +2,11 @@
 
 namespace InnoFlash\LaraStart\Console\Commands\Helpers;
 
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
-use InnoFlash\LaraStart\Helper;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
+use InnoFlash\LaraStart\Helper;
 
 abstract class MakeFile extends Command
 {
@@ -37,10 +37,13 @@ abstract class MakeFile extends Command
     protected function makeFile()
     {
         $this->makeDir();
-        if (!$this->filesystem->isFile($this->getPath() . '/' . $this->getFilename())) {
-            $this->warn(Helper::getFileName($this->argument('name')) . ' created');
-            return $this->filesystem->put($this->getPath() . '/' . $this->getFilename(), $this->getReplaceContent());
-        } else $this->warn(Helper::getFileName($this->argument('name')) . ' already exist');
+        if (! $this->filesystem->isFile($this->getPath().'/'.$this->getFilename())) {
+            $this->warn(Helper::getFileName($this->argument('name')).' created');
+
+            return $this->filesystem->put($this->getPath().'/'.$this->getFilename(), $this->getReplaceContent());
+        } else {
+            $this->warn(Helper::getFileName($this->argument('name')).' already exist');
+        }
     }
 
     /**
@@ -48,7 +51,7 @@ abstract class MakeFile extends Command
      */
     protected function makeDir()
     {
-        if (!$this->filesystem->isDirectory($this->getPath())) {
+        if (! $this->filesystem->isDirectory($this->getPath())) {
             return $this->filesystem->makeDirectory($this->getPath(), 0755, true);
         }
     }
@@ -69,6 +72,7 @@ abstract class MakeFile extends Command
             $this->replaceContent(),
             $content
         );
+
         return $content;
     }
 
@@ -80,7 +84,7 @@ abstract class MakeFile extends Command
             '$filename',
             'modelObject',
             'model_object',
-            'ModelName'
+            'ModelName',
         ];
     }
 

@@ -19,10 +19,10 @@ class LaraStartServiceProvider extends ServiceProvider
     {
         ResponseFactory::mixin(new ResponseMixin());
 
-        $this->mergeConfigFrom(__DIR__ . '/../../config/larastart.php', 'larastart');
+        $this->mergeConfigFrom(__DIR__.'/../../config/larastart.php', 'larastart');
 
         $this->publishes([
-            __DIR__ . '/../../config/larastart.php' => config_path('larastart.php')
+            __DIR__.'/../../config/larastart.php' => config_path('larastart.php'),
         ], 'larastart-config');
     }
 

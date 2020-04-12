@@ -25,7 +25,7 @@ class IndexRequest extends FormRequest
     {
         return [
             'limit' => 'integer|min:1',
-            'filter_text' => 'nullable'
+            'filter_text' => 'nullable',
         ];
     }
 }

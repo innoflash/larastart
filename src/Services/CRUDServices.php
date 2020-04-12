@@ -10,16 +10,16 @@ abstract class CRUDServices
     use APIResponses;
 
     /**
-     * This sets the attributes to be removed from the given set for updating or creating
+     * This sets the attributes to be removed from the given set for updating or creating.
      * @return mixed
      */
-    abstract function getUnsetFields();
+    abstract public function getUnsetFields();
 
     /**
-     * This get the model value or class of the model in the service
+     * This get the model value or class of the model in the service.
      * @return mixed
      */
-    abstract function getModel();
+    abstract public function getModel();
 
     /**
      * This gets the relationship of the given model to the parent.
@@ -28,7 +28,6 @@ abstract class CRUDServices
      */
     public function getParentRelationship()
     {
-        return null;
     }
 
     /**
@@ -41,6 +40,7 @@ abstract class CRUDServices
     {
         try {
             $this->getModel()->delete();
+
             return $this->successResponse($message);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
@@ -48,7 +48,7 @@ abstract class CRUDServices
     }
 
     /**
-     *  Updates the model with the given filtered attributes
+     *  Updates the model with the given filtered attributes.
      *
      * @param array $attributes
      * @param string $message
@@ -59,7 +59,10 @@ abstract class CRUDServices
     {
         try {
             $this->getModel()->update($this->optimizeAttributes($attributes));
-            if ($returnObject) return $this->getModel();
+            if ($returnObject) {
+                return $this->getModel();
+            }
+
             return $this->successResponse($message);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
@@ -67,7 +70,7 @@ abstract class CRUDServices
     }
 
     /**
-     * Creates a new model with the given filtered attributes
+     * Creates a new model with the given filtered attributes.
      *
      * @param array $attributes
      * @param string $message
@@ -79,17 +82,18 @@ abstract class CRUDServices
         try {
             $model = $this->getModel()->create($this->optimizeAttributes($attributes));
 
-            if ($returnObject)
+            if ($returnObject) {
                 return $model;
+            }
+
             return $this->successResponse($message, [], 201);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
     }
 
-
     /**
-     * Creates a new model from the given parent relationship
+     * Creates a new model from the given parent relationship.
      *
      * @param array $attributes
      * @param string $message
@@ -103,8 +107,10 @@ abstract class CRUDServices
 
         try {
             $this->getParent()->save($model);
-            if ($returnObject)
+            if ($returnObject) {
                 return $model;
+            }
+
             return $this->successResponse($message, [], 201);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
@@ -112,40 +118,47 @@ abstract class CRUDServices
     }
 
     /**
-     * This removes unwanted fields from the incoming create/update requests
+     * This removes unwanted fields from the incoming create/update requests.
      *
      * @param array $attributes
      * @return array
      */
     protected function optimizeAttributes(array $attributes)
     {
-        if (is_string($this->getUnsetFields()))
+        if (is_string($this->getUnsetFields())) {
             unset($attributes[$this->getUnsetFields()]);
+        }
 
-        if (is_array($this->getUnsetFields()))
+        if (is_array($this->getUnsetFields())) {
             foreach ($this->getUnsetFields() as $field) {
                 unset($attributes[$field]);
             }
+        }
+
         return $attributes;
     }
 
     /**
-     * Retrieves the parent to child relationship between this model and its parent
+     * Retrieves the parent to child relationship between this model and its parent.
      */
     private function getParent()
     {
-        if (\is_object($this->getParentRelationship())) return $this->getParentRelationship();
-        else if (\is_array($this->getParentRelationship())) {
+        if (\is_object($this->getParentRelationship())) {
+            return $this->getParentRelationship();
+        } elseif (\is_array($this->getParentRelationship())) {
             $class = $this->getParentRelationship()['0'];
             $relationship = $this->getParentRelationship()['1'];
 
-            if (sizeof($this->getParentRelationship()) > 2) $parent = $class::findOrFail(request($this->getParentRelationship()['2']));
-            else {
+            if (count($this->getParentRelationship()) > 2) {
+                $parent = $class::findOrFail(request($this->getParentRelationship()['2']));
+            } else {
                 $_class = new $class();
                 $parent = $class::findOrFail(request($_class->getForeignKey()));
             }
 
             return $parent->$relationship();
-        } else throw new InvalidArgumentException('You have set an invalid parent for this model');
+        } else {
+            throw new InvalidArgumentException('You have set an invalid parent for this model');
+        }
     }
 }

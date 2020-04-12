@@ -21,11 +21,13 @@ class MakeServiceCommand extends MakeFile
      */
     protected $description = 'This creates a service class for a specified model if supplied';
 
-    function getStub()
+    public function getStub()
     {
-        if ($this->hasArgument('name'))
-            return __DIR__ . '/stubs/FullService.stub';
-        else return __DIR__ . '/stubs/PlainService.stub';
+        if ($this->hasArgument('name')) {
+            return __DIR__.'/stubs/FullService.stub';
+        } else {
+            return __DIR__.'/stubs/PlainService.stub';
+        }
     }
 
     public function getModel()
@@ -33,13 +35,13 @@ class MakeServiceCommand extends MakeFile
         return $this->argument('model');
     }
 
-    function getFilename()
+    public function getFilename()
     {
-        return Helper::getFileName($this->argument('name')) . '.php';
+        return Helper::getFileName($this->argument('name')).'.php';
     }
 
-    function getPath()
+    public function getPath()
     {
-        return \app_path('Services/' . Helper::getDirName($this->argument('name')));
+        return \app_path('Services/'.Helper::getDirName($this->argument('name')));
     }
 }

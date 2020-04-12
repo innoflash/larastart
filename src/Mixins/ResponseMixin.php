@@ -9,12 +9,12 @@ class ResponseMixin
      *
      * @return \Closure
      */
-    function successResponse()
+    public function successResponse()
     {
         return function ($message, array $data = [], int $statusCode = 200) {
             return response()->json(array_merge([
                 'success' => true,
-                'message' => $message
+                'message' => $message,
             ], $data), $statusCode);
         };
     }
