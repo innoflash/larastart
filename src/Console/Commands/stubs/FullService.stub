@@ -2,8 +2,8 @@
 namespace App\Services$servicePackage;
 
 use InnoFlash\LaraStart\Services\CRUDServices;
-use Illuminate\Database\Eloquent\Model as ParentModel;
 use $namespaceModelName;
+use Illuminate\Database\Eloquent\Model as ParentModel;
 
 class $filename extends CRUDServices
 {
@@ -13,11 +13,13 @@ class $filename extends CRUDServices
     {
         if (request()->has('model_object_id'))
             $this->modelObject = ModelName::findOrFail(request('model_object_id'));
-        else $this->modelObject = $modelObject;
+        else {
+            $this->modelObject = $modelObject;
+        }
     }
 
     /**
-     * Retrieves an instance of modelObject
+     * Retrieves an instance of modelObject.
      */
     public function getModelName() : ModelName
     {
@@ -26,8 +28,8 @@ class $filename extends CRUDServices
 
     /**
      * Makes a list of fields that you do not want to be sent
-     * to the create or update methods
-     * Its mainly the fields that you do not have in the modelObjects table
+     * to the create or update methods.
+     * Its mainly the fields that you do not have in the modelObjects table.
      */
     public function getUnsetFields()
     {
@@ -35,8 +37,8 @@ class $filename extends CRUDServices
     }
 
     /**
-     * This returns the model found in the constructor
-     * or an instance of the class if no modelObject is found
+     * This returns the model found in the constructor.
+     * or an instance of the class if no modelObject is found.
      */
     public function getModel()
     {
@@ -44,8 +46,8 @@ class $filename extends CRUDServices
     }
 
     /**
-     * Attaches a parent to the current modelObject
-     * You can delete this if you do not intent to create modelObjects from parent relationships
+     * Attaches a parent to the current modelObject.
+     * You can delete this if you do not intent to create modelObjects from parent relationships.
      */
     public function getParentRelationship()
     {
