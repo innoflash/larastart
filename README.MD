@@ -1,4 +1,10 @@
 # LaraStart
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/innoflash/larastart.svg?style=flat-square)](https://packagist.org/packages/innoflash/larastart)
+[![Build Status](https://img.shields.io/travis/innoflash/laravel-self-test/master.svg?style=flat-square)](https://travis-ci.org/innoflash/laravel-self-test)
+[![Quality Score](https://img.shields.io/scrutinizer/g/innoflash/larastart.svg?style=flat-square)](https://scrutinizer-ci.com/g/innoflash/larastart)
+[![Daily Downloads](https://poser.pugx.org/innoflash/larastart/d/daily)](https://packagist.org/packages/innoflash/larastart)
+[![Total Downloads](https://img.shields.io/packagist/dt/innoflash/larastart.svg?style=flat-square)](https://packagist.org/packages/innoflash/larastart)
+[![Software License](https://img.shields.io/badge/license-MIT-blue.svg?style=round-square)](LICENSE.md)
 
 ## Table of contents
 * [API Respones](#api-responses)
@@ -83,17 +89,17 @@ class Handler extends ExceptionHandler
     }
 ```
 
-* This overrides all errors and format 
+* This overrides all errors and format
 
 ![Error message](images/error_message.png)
 
-If you want the default error rendering 
+If you want the default error rendering
 ```php
 return $this->apiExceptions($request, $exception, true); //true triggers the default error
 ```
 
 ### #AuthService
-* This one helps handle logging in and fetching the user access token. 
+* This one helps handle logging in and fetching the user access token.
 * Works really well with [Laravel Passport](https://laravel.com/docs/passport)
 
 #### SETUP
@@ -190,7 +196,7 @@ return [
 ```
 
 ## CRUD Service
-This is meant to simplify the most CRUD operations and its best done by generating some service classes in the ```app/Services``` directory. 
+This is meant to simplify the most CRUD operations and its best done by generating some service classes in the ```app/Services``` directory.
 The services handle basic
 * Create
 * Update
@@ -238,16 +244,16 @@ Good to go, now let`s see how to run crud functions here
 
     /**
      * Query for multiple results
-     * 
+     *
      * You are still open to run default model query like
      */
     return Model::all();
 
-     /** 
-     * but since the service is can inject the model into the 
-     * request we can run it as 
+     /**
+     * but since the service is can inject the model into the
+     * request we can run it as
      */
-    return $this->modelService->getModel()->all(); 
+    return $this->modelService->getModel()->all();
 ```
 
 ##### DELETE QUERY
@@ -258,7 +264,7 @@ public function delete(DeleteRequest $request)
      * Since the service is injected into the controller it
      * knows exactly what model to target so calling destroy
      * automates a precise delete
-     * 
+     *
      * You can pass a custom delete message or leave as is
      */
     return $this->modelService->destroy('custom delete message');
@@ -270,12 +276,12 @@ public function delete(DeleteRequest $request)
 public function update(UpdateRequest $request)
 {
     /**
-     * You just have to sent the right model id and the 
+     * You just have to sent the right model id and the
      * service finds the model and updates the model
-     * 
+     *
      * $params is highly likely to be the validated input
-     * 
-     * You can override the update success message by adding 
+     *
+     * You can override the update success message by adding
      * a message param as a second param
      * return {
      *              success: true,
@@ -292,13 +298,13 @@ public function create(CreateRequest $request)
     /**
      * the create method takes an array for params so we are just gonna
      * set the validated values from our request
-     * 
-     * This return the a default response 
+     *
+     * This return the a default response
      * {
      *      success: true,
      *      message: "model created"
      * }
-     */ 
+     */
     return $this->modelService->create($request->validated());
 
     /**
@@ -335,7 +341,7 @@ Oftenly we would wanna create models based on a model they belong to. You will n
         ];
 
         /**
-         * Mainly i have been using to attach a relationship to the 
+         * Mainly i have been using to attach a relationship to the
          * authenticated user
          * If you already have the parent object call the relationship
          * for this as shown in the example below
