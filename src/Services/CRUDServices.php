@@ -11,9 +11,9 @@ abstract class CRUDServices
 
     /**
      * This sets the attributes to be removed from the given set for updating or creating.
-     * @return mixed
+     * @return array
      */
-    abstract public function getUnsetFields();
+    abstract public function getUnsetFields(): array;
 
     /**
      * This get the model value or class of the model in the service.
@@ -100,8 +100,11 @@ abstract class CRUDServices
      * @param bool $returnObject
      * @return \Illuminate\Http\JsonResponse
      */
-    public function createFromParent(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
-    {
+    public function createFromParent(
+        array $attributes,
+        string $message = 'Created successfully!',
+        bool $returnObject = false
+    ) {
         $class = get_class($this->getModel());
         $model = new $class($this->optimizeAttributes($attributes));
 
@@ -125,14 +128,8 @@ abstract class CRUDServices
      */
     protected function optimizeAttributes(array $attributes)
     {
-        if (is_string($this->getUnsetFields())) {
-            unset($attributes[$this->getUnsetFields()]);
-        }
-
-        if (is_array($this->getUnsetFields())) {
-            foreach ($this->getUnsetFields() as $field) {
-                unset($attributes[$field]);
-            }
+        foreach ($this->getUnsetFields() as $field) {
+            unset($attributes[$field]);
         }
 
         return $attributes;
