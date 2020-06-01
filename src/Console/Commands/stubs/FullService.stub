@@ -21,7 +21,7 @@ class $filename extends CRUDServices
     /**
      * Retrieves an instance of modelObject.
      */
-    public function getModelName() : ModelName
+    public function getModelName(): ModelName
     {
         return $this->modelObject;
     }
@@ -31,7 +31,7 @@ class $filename extends CRUDServices
      * to the create or update methods.
      * Its mainly the fields that you do not have in the modelObjects table.
      */
-    public function getUnsetFields()
+    public function getUnsetFields(): array
     {
         return ['model_object_id'];
     }
@@ -40,7 +40,7 @@ class $filename extends CRUDServices
      * This returns the model found in the constructor.
      * or an instance of the class if no modelObject is found.
      */
-    public function getModel()
+    public function getModel(): ModelName
     {
         return $this->getModelName();
     }
