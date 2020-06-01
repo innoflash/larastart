@@ -27,7 +27,7 @@ class LaraStartServiceProvider extends ServiceProvider
         ], 'larastart-config');
 
         $this->commands([
-            MakeServiceCommand::class
+            MakeServiceCommand::class,
         ]);
     }
 
