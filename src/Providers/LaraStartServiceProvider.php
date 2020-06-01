@@ -4,6 +4,7 @@ namespace InnoFlash\LaraStart\Providers;
 
 use Illuminate\Routing\ResponseFactory;
 use Illuminate\Support\ServiceProvider;
+use InnoFlash\LaraStart\Console\Commands\MakeServiceCommand;
 use InnoFlash\LaraStart\Mixins\ResponseMixin;
 use InnoFlash\LaraStart\Services\AuthService;
 
@@ -24,6 +25,10 @@ class LaraStartServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../config/larastart.php' => config_path('larastart.php'),
         ], 'larastart-config');
+
+        $this->commands([
+            MakeServiceCommand::class
+        ]);
     }
 
     /**
