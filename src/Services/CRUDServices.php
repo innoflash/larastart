@@ -41,7 +41,7 @@ abstract class CRUDServices
         try {
             $this->getModel()->delete();
 
-            return $this->successResponse($message);
+            return $this->successResponse($message, [], 204);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
