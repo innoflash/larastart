@@ -9,6 +9,13 @@ abstract class CRUDServices
 {
     use APIResponses;
 
+    protected bool $returnObject;
+
+    public function __construct()
+    {
+        $this->returnObject = config('larastart.return_object');
+    }
+
     /**
      * This sets the attributes to be removed from the given set for updating or creating.
      * @return array
@@ -41,6 +48,10 @@ abstract class CRUDServices
         try {
             $this->getModel()->delete();
 
+            if ($this->returnObject) {
+                return '';
+            }
+
             return $this->successResponse($message, [], 204);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
@@ -59,7 +70,7 @@ abstract class CRUDServices
     {
         try {
             $this->getModel()->update($this->optimizeAttributes($attributes));
-            if ($returnObject) {
+            if ($returnObject || $this->returnObject) {
                 return $this->getModel();
             }
 
@@ -82,7 +93,7 @@ abstract class CRUDServices
         try {
             $model = $this->getModel()->create($this->optimizeAttributes($attributes));
 
-            if ($returnObject) {
+            if ($returnObject || $this->returnObject) {
                 return $model;
             }
 
@@ -110,7 +121,7 @@ abstract class CRUDServices
 
         try {
             $this->getParent()->save($model);
-            if ($returnObject) {
+            if ($returnObject || $this->returnObject) {
                 return $model;
             }
 
