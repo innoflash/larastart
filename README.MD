@@ -234,7 +234,7 @@ class ModelController extends Controller
 
 public function register()
 {
-    $this->app->singleton(ModelService::class, ModelService::class);
+    $this->app->singleton(ModelService::class);
 }
 ```
 
