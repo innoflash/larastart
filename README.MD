@@ -191,7 +191,12 @@ return [
     /**
      * Sets the default guard you want to use in the auth service
      */
-    'guard' => 'api'
+    'guard' => 'api',
+    
+    /**
+     * Sets whether or not all CRUD ops should return json or object.
+     */
+    'return_object'       => false,
 ];
 ```
 
