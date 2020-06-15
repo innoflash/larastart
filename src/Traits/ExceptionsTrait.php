@@ -2,80 +2,49 @@
 
 namespace InnoFlash\LaraStart\Traits;
 
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use InvalidArgumentException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 trait ExceptionsTrait
 {
+    private array $errorMessages = [
+        NotFoundHttpException::class  => 'Invalid route',
+        RouteNotFoundException::class => 'Authorization headers missing',
+    ];
+
+    private array $errorCodes = [
+        ValidationException::class    => 422,
+        RouteNotFoundException::class => 401,
+    ];
+
     public function apiExceptions(Request $request, $exception, bool $rawError = false)
     {
         if ($rawError) {
             return parent::render($request, $exception);
-        } else {
-            if ($exception instanceof ModelNotFoundException) {
-                $errorBody = [
-                    'status' => Response::HTTP_NOT_FOUND,
-                    'code' => 'MOD_04',
-                    'message' => $exception->getMessage(),
-                ];
-            } elseif ($exception instanceof NotFoundHttpException) {
-                $errorBody = [
-                    'status' => Response::HTTP_NOT_FOUND,
-                    'code' => 'RT_04',
-                    'message' => 'Invalid route',
-                ];
-            } elseif ($exception instanceof InvalidArgumentException) {
-                $errorBody = [
-                    'status' => Response::HTTP_NOT_ACCEPTABLE,
-                    'code' => 'AUT_01',
-                    'message' => 'Authorization code is empty.',
-                ];
-            } elseif ($exception instanceof MethodNotAllowedHttpException) {
-                $errorBody = [
-                    'status' => Response::HTTP_METHOD_NOT_ALLOWED,
-                    'code' => 'MET_05',
-                    'message' => $exception->getMessage(),
-                ];
-            } elseif ($exception instanceof ValidationException) {
-                $messages = [];
-                foreach ($exception->errors() as $key => $error) {
-                    foreach ($error as $key => $err) {
-                        array_push($messages, $err);
-                    }
-                }
-                $errorBody = [
-                    'status' => Response::HTTP_UNPROCESSABLE_ENTITY,
-                    'code' => 'VAL_22',
-                    'message' => implode(PHP_EOL, $messages),
-                ];
-            } elseif ($exception instanceof BadRequestHttpException) {
-                $errorBody = [
-                    'status' => Response::HTTP_BAD_REQUEST,
-                    'code' => 'VAL_22',
-                    'message' => $exception->getMessage(),
-                ];
-            } elseif ($exception instanceof AuthorizationException) {
-                $errorBody = [
-                    'status' => Response::HTTP_FORBIDDEN,
-                    'code' => 'AUT_02',
-                    'message' => $exception->getMessage(),
-                ];
-            } else {
-                $errorBody = [
-                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                    'code' => 'SER_00',
-                    'message' => $exception->getMessage(),
-                ];
-            }
-
-            return \response()->json($errorBody, $errorBody['status']);
         }
+
+        $statusCode = $this->errorCodes[get_class($exception)] ?? 500;
+
+        if (in_array('getStatusCode', get_class_methods($exception))) {
+            $statusCode = $exception->getStatusCode();
+        }
+
+        if ($exception instanceof ValidationException) {
+            $errors = collect($exception->errors())->flatten()->toArray();
+            $message = implode(PHP_EOL, $errors);
+        } else {
+            $message = $this->errorMessages[get_class($exception)]
+                ?? (strlen($exception->getMessage())
+                    ? $exception->getMessage()
+                    : 'Unknown server error!');
+        }
+
+        return \response()->json([
+            'class'      => get_class($exception),
+            'statusCode' => $statusCode,
+            'message'    => $message,
+        ], $statusCode);
     }
 }

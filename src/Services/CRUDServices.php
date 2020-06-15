@@ -40,7 +40,8 @@ abstract class CRUDServices
     /**
      * Deletes the model from the database.
      *
-     * @param string $message
+     * @param  string  $message
+     *
      * @return
      */
     public function destroy(string $message = 'Deleted successful!')
@@ -61,9 +62,10 @@ abstract class CRUDServices
     /**
      *  Updates the model with the given filtered attributes.
      *
-     * @param array $attributes
-     * @param string $message
-     * @param bool $returnObject
+     * @param  array  $attributes
+     * @param  string  $message
+     * @param  bool  $returnObject
+     *
      * @return \Illuminate\Http\JsonResponse|mixed
      */
     public function update(array $attributes, string $message = 'Update successful!', bool $returnObject = false)
@@ -83,9 +85,10 @@ abstract class CRUDServices
     /**
      * Creates a new model with the given filtered attributes.
      *
-     * @param array $attributes
-     * @param string $message
-     * @param bool $returnObject
+     * @param  array  $attributes
+     * @param  string  $message
+     * @param  bool  $returnObject
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
@@ -106,9 +109,10 @@ abstract class CRUDServices
     /**
      * Creates a new model from the given parent relationship.
      *
-     * @param array $attributes
-     * @param string $message
-     * @param bool $returnObject
+     * @param  array  $attributes
+     * @param  string  $message
+     * @param  bool  $returnObject
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function createFromParent(
@@ -134,7 +138,8 @@ abstract class CRUDServices
     /**
      * This removes unwanted fields from the incoming create/update requests.
      *
-     * @param array $attributes
+     * @param  array  $attributes
+     *
      * @return array
      */
     protected function optimizeAttributes(array $attributes)
