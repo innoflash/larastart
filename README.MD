@@ -196,7 +196,12 @@ return [
     /**
      * Sets the default guard you want to use in the auth service
      */
-    'guard' => 'api'
+    'guard' => 'api',
+    
+    /**
+     * Sets whether or not all CRUD ops should return json or object.
+     */
+    'return_object'       => false,
 ];
 ```
 
@@ -234,7 +239,7 @@ class ModelController extends Controller
 
 public function register()
 {
-    $this->app->singleton(ModelService::class, ModelService::class);
+    $this->app->singleton(ModelService::class);
 }
 ```
 
