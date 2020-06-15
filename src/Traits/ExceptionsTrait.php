@@ -9,11 +9,19 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 trait ExceptionsTrait
 {
+    /**
+     * Class - error message key maps.
+     * @var array
+     */
     private array $errorMessages = [
         NotFoundHttpException::class  => 'Invalid route',
         RouteNotFoundException::class => 'Authorization headers missing',
     ];
 
+    /**
+     * Class - error code key maps.
+     * @var array
+     */
     private array $errorCodes = [
         ValidationException::class    => 422,
         RouteNotFoundException::class => 401,

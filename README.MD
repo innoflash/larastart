@@ -7,7 +7,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-blue.svg?style=round-square)](LICENSE.md)
 
 ## Table of contents
-* [API Respones](#api-responses)
+* [API Responses](#api-responses)
 * [Exception Traits](#exceptionstrait)
 * [Auth Service](#authservice)
 * [CRUD Services](#crud-service)
@@ -90,8 +90,13 @@ class Handler extends ExceptionHandler
 ```
 
 * This overrides all errors and format
-
-![Error message](images/error_message.png)
+```json
+{
+    "class": "Illuminate\\Validation\\ValidationException", //error class
+    "statusCode": 422,   //error status code
+    "message": "The password field is required." //error message
+}
+```
 
 If you want the default error rendering
 ```php
