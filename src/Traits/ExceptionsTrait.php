@@ -50,7 +50,7 @@ trait ExceptionsTrait
         }
 
         return \response()->json([
-            'class'      => get_class($exception),
+            'exception'      => get_class($exception),
             'statusCode' => $statusCode,
             'message'    => $message,
         ], $statusCode);

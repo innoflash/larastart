@@ -92,7 +92,7 @@ class Handler extends ExceptionHandler
 * This overrides all errors and format
 ```json
 {
-    "class": "Illuminate\\Validation\\ValidationException", //error-class
+    "exception": "Illuminate\\Validation\\ValidationException", //error-class
     "statusCode": 422,   //error-status-code
     "message": "The password field is required." //error-message
 }
