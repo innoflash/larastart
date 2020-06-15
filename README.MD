@@ -92,9 +92,9 @@ class Handler extends ExceptionHandler
 * This overrides all errors and format
 ```json
 {
-    "class": "Illuminate\\Validation\\ValidationException", //error class
-    "statusCode": 422,   //error status code
-    "message": "The password field is required." //error message
+    "class": "Illuminate\\Validation\\ValidationException", //error-class
+    "statusCode": 422,   //error-status-code
+    "message": "The password field is required." //error-message
 }
 ```
 
@@ -197,7 +197,7 @@ return [
      * Sets the default guard you want to use in the auth service
      */
     'guard' => 'api',
-    
+
     /**
      * Sets whether or not all CRUD ops should return json or object.
      */
