@@ -12,7 +12,7 @@ class MakeServiceCommand extends MakeFile
      *
      * @var string
      */
-    protected $signature = 'make:service {name : The name of the service class with path too} {--model= : The model to attach to the service}';
+    protected $signature = 'make:service {name : The name of the service class with path too} {--m|model= : The model to attach to the service}';
 
     /**
      * The console command description.
