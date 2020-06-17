@@ -137,7 +137,7 @@ abstract class CRUDServices
     protected function optimizeAttributes(array $attributes)
     {
         return collect($attributes)
-            ->reject($this->getUnsetFields())
+            ->except($this->getUnsetFields())
             ->toArray();
     }
 
