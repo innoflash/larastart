@@ -105,7 +105,7 @@ return $this->apiExceptions($request, $exception, true); //true triggers the def
 
 ### #AuthService
 * This one helps handle logging in and fetching the user access token.
-* Works really well with [Laravel Passport](https://laravel.com/docs/passport)
+* Works really well with [JWT](https://github.com/tymondesigns/jwt-auth)
 
 #### SETUP
 In the ```.env``` file you will need to add JWT secret key.

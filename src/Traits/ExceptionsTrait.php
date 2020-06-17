@@ -33,6 +33,13 @@ trait ExceptionsTrait
             return parent::render($request, $exception);
         }
 
+        if (in_array('getMessage', get_class_methods($exception)) && strlen($exception->getMessage())) {
+            $message = $exception->getMessage();
+        } else {
+            $message = 'Unknown server error.';
+        }
+        $message = $this->errorMessages[get_class($exception)] ?? $message;
+
         $statusCode = $this->errorCodes[get_class($exception)] ?? 500;
 
         if (in_array('getStatusCode', get_class_methods($exception))) {
@@ -42,15 +49,10 @@ trait ExceptionsTrait
         if ($exception instanceof ValidationException) {
             $errors = collect($exception->errors())->flatten()->toArray();
             $message = implode(PHP_EOL, $errors);
-        } else {
-            $message = $this->errorMessages[get_class($exception)]
-                ?? (strlen($exception->getMessage())
-                    ? $exception->getMessage()
-                    : 'Unknown server error!');
         }
 
         return \response()->json([
-            'exception'      => get_class($exception),
+            'exception'  => get_class($exception),
             'statusCode' => $statusCode,
             'message'    => $message,
         ], $statusCode);
