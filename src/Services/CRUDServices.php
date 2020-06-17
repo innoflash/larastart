@@ -140,11 +140,9 @@ abstract class CRUDServices
      */
     protected function optimizeAttributes(array $attributes)
     {
-        foreach ($this->getUnsetFields() as $field) {
-            unset($attributes[$field]);
-        }
-
-        return $attributes;
+        return collect($attributes)
+            ->reject($this->getUnsetFields())
+            ->toArray();
     }
 
     /**
