@@ -18,18 +18,13 @@ abstract class CRUDServices
     abstract public function getUnsetFields(): array;
 
     /**
-     * This get the model value or class of the model in the service.
-     * @return mixed
-     */
-    abstract public function getModel();
-
-    /**
      * This gets the relationship of the given model to the parent.
      *
      * @return mixed
      */
     public function getParentRelationship()
     {
+        throw new InvalidArgumentException('A relationship for these models is not set!');
     }
 
     /**
@@ -42,10 +37,10 @@ abstract class CRUDServices
     public function destroy(string $message = 'Deleted successful!')
     {
         try {
-            $this->getModel()->delete();
+            $this->getServiceVariable()->delete();
 
             if (config('larastart.return_object')) {
-                return '';
+                return 'its this';
             }
 
             return $this->successResponse($message, [], 204);
@@ -66,9 +61,9 @@ abstract class CRUDServices
     public function update(array $attributes, string $message = 'Update successful!', bool $returnObject = false)
     {
         try {
-            $this->getModel()->update($this->optimizeAttributes($attributes));
+            $this->getServiceVariable()->update($this->optimizeAttributes($attributes));
             if ($returnObject || config('larastart.return_object')) {
-                return $this->getModel();
+                return $this->getServiceVariable();
             }
 
             return $this->successResponse($message);
@@ -152,7 +147,9 @@ abstract class CRUDServices
     {
         if (\is_object($this->getParentRelationship())) {
             return $this->getParentRelationship();
-        } elseif (\is_array($this->getParentRelationship())) {
+        }
+
+        if (\is_array($this->getParentRelationship())) {
             $class = $this->getParentRelationship()['0'];
             $relationship = $this->getParentRelationship()['1'];
 
@@ -176,13 +173,21 @@ abstract class CRUDServices
      */
     protected function getModelClassName(): string
     {
-        $modelVariable = collect(get_object_vars($this))
+        return get_class($this->getServiceVariable());
+    }
+
+    /**
+     * Get the service variable.
+     *
+     * @return mixed
+     */
+    private function getServiceVariable()
+    {
+        return collect(get_object_vars($this))
             ->reject(fn($var) => ! ($var instanceof Model))
             ->filter(function ($var, $key) {
                 return Str::contains('get'.Str::ucfirst($key), get_class_methods($this))
                     && Str::startsWith(Str::lower(class_basename($this)), $key);
             })->first();
-
-        return get_class($modelVariable);
     }
 }
