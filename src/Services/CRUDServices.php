@@ -40,7 +40,7 @@ abstract class CRUDServices
             $this->getServiceVariable()->delete();
 
             if (config('larastart.return_object')) {
-                return 'its this';
+                return '';
             }
 
             return $this->successResponse($message, [], 204);
@@ -62,8 +62,9 @@ abstract class CRUDServices
     {
         try {
             $this->getServiceVariable()->update($this->optimizeAttributes($attributes));
+
             if ($returnObject || config('larastart.return_object')) {
-                return $this->getServiceVariable();
+                return $this->getServiceVariable()->refresh();
             }
 
             return $this->successResponse($message);
