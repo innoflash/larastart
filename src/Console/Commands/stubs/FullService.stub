@@ -2,8 +2,8 @@
 namespace App\Services$servicePackage;
 
 use InnoFlash\LaraStart\Services\CRUDServices;
-use $namespaceModelName;
 use Illuminate\Database\Eloquent\Model as ParentModel;
+use $namespaceModelName;
 
 class $filename extends CRUDServices
 {
@@ -11,14 +11,14 @@ class $filename extends CRUDServices
 
     public function __construct()
     {
-        $this->modelObject = new ModelName();
+        $this->modelObject = app(ModelName::class);
 
         if (request()->has('model_object_id')) {
             $this->modelObject = ModelName::findOrFail(request('model_object_id'));
         }
 
-        if (request()->route('modelObject')) {
-            $this->modelObject = request()->route('modelObject');
+        if (request()->route()->hasParameter('modelObject')) {
+            $this->modelObject = $this->modelObject->resolveRouteBinding(request()->route('modelObject'));
         }
     }
 
