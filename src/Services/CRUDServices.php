@@ -151,14 +151,13 @@ abstract class CRUDServices
         }
 
         if (\is_array($this->getParentRelationship())) {
-            $class = $this->getParentRelationship()['0'];
-            $relationship = $this->getParentRelationship()['1'];
+            [$class, $relationship, $parentIdRouteKey] = $this->getParentRelationship();
+
+            $_class = new $class();
+            $parent = $class::findOrFail(request($_class->getForeignKey()));
 
             if (count($this->getParentRelationship()) > 2) {
-                $parent = $class::findOrFail(request($this->getParentRelationship()['2']));
-            } else {
-                $_class = new $class();
-                $parent = $class::findOrFail(request($_class->getForeignKey()));
+                $parent = $class::findOrFail(request($parentIdRouteKey));
             }
 
             return $parent->$relationship();
