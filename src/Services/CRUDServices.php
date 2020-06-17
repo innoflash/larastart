@@ -2,19 +2,14 @@
 
 namespace InnoFlash\LaraStart\Services;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use InnoFlash\LaraStart\Traits\APIResponses;
 use InvalidArgumentException;
 
 abstract class CRUDServices
 {
     use APIResponses;
-
-    protected bool $returnObject;
-
-    public function __construct()
-    {
-        $this->returnObject = config('larastart.return_object');
-    }
 
     /**
      * This sets the attributes to be removed from the given set for updating or creating.
@@ -49,7 +44,7 @@ abstract class CRUDServices
         try {
             $this->getModel()->delete();
 
-            if ($this->returnObject) {
+            if (config('larastart.return_object')) {
                 return '';
             }
 
@@ -72,7 +67,7 @@ abstract class CRUDServices
     {
         try {
             $this->getModel()->update($this->optimizeAttributes($attributes));
-            if ($returnObject || $this->returnObject) {
+            if ($returnObject || config('larastart.return_object')) {
                 return $this->getModel();
             }
 
@@ -93,10 +88,11 @@ abstract class CRUDServices
      */
     public function create(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
-        try {
-            $model = $this->getModel()->create($this->optimizeAttributes($attributes));
 
-            if ($returnObject || $this->returnObject) {
+        try {
+            $model = $this->getModelClassName()::create($this->optimizeAttributes($attributes));
+
+            if ($returnObject || config('larastart.return_object')) {
                 return $model;
             }
 
@@ -120,12 +116,12 @@ abstract class CRUDServices
         string $message = 'Created successfully!',
         bool $returnObject = false
     ) {
-        $class = get_class($this->getModel());
+        $class = $this->getModelClassName();
         $model = new $class($this->optimizeAttributes($attributes));
 
         try {
             $this->getParent()->save($model);
-            if ($returnObject || $this->returnObject) {
+            if ($returnObject || config('larastart.return_object')) {
                 return $model;
             }
 
@@ -173,5 +169,22 @@ abstract class CRUDServices
         } else {
             throw new InvalidArgumentException('You have set an invalid parent for this model');
         }
+    }
+
+    /**
+     * Return the class name of the service main model.
+     *
+     * @return string
+     */
+    protected function getModelClassName(): string
+    {
+        $modelVariable = collect(get_object_vars($this))
+            ->reject(fn($var) => ! ($var instanceof Model))
+            ->filter(function ($var, $key) {
+                return Str::contains('get'.Str::ucfirst($key), get_class_methods($this))
+                    && Str::startsWith(Str::lower(class_basename($this)), $key);
+            })->first();
+
+        return get_class($modelVariable);
     }
 }
