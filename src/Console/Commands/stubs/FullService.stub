@@ -44,17 +44,6 @@ class $filename extends CRUDServices
         return ['model_object_id'];
     }
 
-     /**
-      * This returns the model found in the constructor.
-      * or an instance of the class if no message is found.
-      *
-      * @return \$namespaceModelName|ModelName class
-      */
-    public function getModel(): ModelName
-    {
-        return $this->getModelName();
-    }
-
     /**
      * Attaches a parent to the current modelObject.
      * You can delete this if you do not intent to create modelObjects from parent relationships.

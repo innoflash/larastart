@@ -161,9 +161,9 @@ abstract class CRUDServices
             }
 
             return $parent->$relationship();
-        } else {
-            throw new InvalidArgumentException('You have set an invalid parent for this model');
         }
+
+        throw new InvalidArgumentException('You have set an invalid parent for this model');
     }
 
     /**
@@ -184,7 +184,7 @@ abstract class CRUDServices
     private function getServiceVariable()
     {
         return collect(get_object_vars($this))
-            ->reject(fn($var) => ! ($var instanceof Model))
+            ->reject(fn ($var) => ! ($var instanceof Model))
             ->filter(function ($var, $key) {
                 return Str::contains('get'.Str::ucfirst($key), get_class_methods($this))
                     && Str::startsWith(Str::lower(class_basename($this)), $key);
