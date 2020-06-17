@@ -156,7 +156,7 @@ abstract class CRUDServices
             $_class = new $class();
             $parent = $class::findOrFail(request($_class->getForeignKey()));
 
-            if (count($this->getParentRelationship()) > 2) {
+            if ($parentIdRouteKey) {
                 $parent = $class::findOrFail(request($parentIdRouteKey));
             }
 

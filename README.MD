@@ -231,6 +231,7 @@ class ModelController extends Controller
         $this->modelService = $modelService;
     }
 ```
+> Alternatively you can inject the service directly into your controller functions.
 
 * If you are going to use the ```ModelService``` in more than one class ie. the controller (and you wanna use it in requests and resources and wherever) you will have to add the ```ModelService``` into the ```AppServiceProvider``` as a singleton so that the app does not have rerun querying the model
 
@@ -244,7 +245,9 @@ public function register()
 ```
 
 Good to go, now let`s see how to run crud functions here
+> Please note that for all CRUD Ops (except destroy) you can pass a `boolean flag` of `true` if you want to return the object and skip responding as JSON.
 
+> Also keep in mind that the services are wired in such a way that they can fetch route-model-bound models.
 ##### SELECT QUERY
 ```php
     /**
@@ -258,12 +261,6 @@ Good to go, now let`s see how to run crud functions here
      * You are still open to run default model query like
      */
     return Model::all();
-
-     /**
-     * but since the service is can inject the model into the
-     * request we can run it as
-     */
-    return $this->modelService->getModel()->all();
 ```
 
 ##### DELETE QUERY
