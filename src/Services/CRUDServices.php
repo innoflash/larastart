@@ -84,7 +84,6 @@ abstract class CRUDServices
      */
     public function create(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
     {
-
         try {
             $model = $this->getModelClassName()::create($this->optimizeAttributes($attributes));
 

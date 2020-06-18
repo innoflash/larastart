@@ -15,7 +15,7 @@ class $filename extends CRUDServices
 
         $modelObjectId = request()->route('modelObject') ?? request('model_object_id');
 
-        if($modelObjectId){
+        if ($modelObjectId) {
             $this->modelObject = $this->modelObject->resolveRouteBinding($modelObjectId);
         }
     }
