@@ -58,7 +58,13 @@ $this->successMessege('{optional :message here}')
 
 and this gets you a response with status 200
 
-![Response image](images/response_message.png)
+```json
+{
+  "success": true,
+  "message": "status message",
+  "data": [] //optional
+}
+```
 
 
 ## ExceptionsTrait

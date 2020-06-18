@@ -6,11 +6,26 @@ use Illuminate\Routing\ResponseFactory;
 
 trait APIResponses
 {
+    /**
+     * The json response for success responses.
+     *
+     * @param $message
+     * @param  array  $data
+     * @param  int  $statusCode
+     *
+     * @return mixed
+     */
     public function successResponse($message, array $data = [], int $statusCode = 200)
     {
-        return ResponseFactory::successResponse($message, array_merge([
+        $responseData = [
             'success' => true,
             'message' => $message,
-        ], $data), $statusCode);
+        ];
+
+        if ($data) {
+            $responseData['data'] = $data;
+        }
+
+        return ResponseFactory::successResponse($message, $responseData, $statusCode);
     }
 }
