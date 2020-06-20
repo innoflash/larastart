@@ -30,11 +30,11 @@ abstract class CRUDServices
     /**
      * Deletes the model from the database.
      *
-     * @param  string  $message
+     * @param string $message
      *
      * @return
      */
-    public function destroy(string $message = 'Deleted successful!')
+    public function destroy(string $message = null)
     {
         try {
             $this->getServiceVariable()->delete();
@@ -43,7 +43,7 @@ abstract class CRUDServices
                 return '';
             }
 
-            return $this->successResponse($message, [], 204);
+            return $this->successResponse($message ?? $this->getModelClassName().' deleted successfully', [], 204);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -52,13 +52,13 @@ abstract class CRUDServices
     /**
      *  Updates the model with the given filtered attributes.
      *
-     * @param  array  $attributes
-     * @param  string  $message
-     * @param  bool  $returnObject
+     * @param array $attributes
+     * @param string $message
+     * @param bool $returnObject
      *
      * @return \Illuminate\Http\JsonResponse|mixed
      */
-    public function update(array $attributes, string $message = 'Update successful!', bool $returnObject = false)
+    public function update(array $attributes, string $message = null, bool $returnObject = false)
     {
         try {
             $this->getServiceVariable()->update($this->optimizeAttributes($attributes));
@@ -67,7 +67,7 @@ abstract class CRUDServices
                 return $this->getServiceVariable()->refresh();
             }
 
-            return $this->successResponse($message);
+            return $this->successResponse($message ?? $this->getModelClassName().' updated successfully');
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -76,13 +76,13 @@ abstract class CRUDServices
     /**
      * Creates a new model with the given filtered attributes.
      *
-     * @param  array  $attributes
-     * @param  string  $message
-     * @param  bool  $returnObject
+     * @param array $attributes
+     * @param string $message
+     * @param bool $returnObject
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(array $attributes, string $message = 'Created successfully!', bool $returnObject = false)
+    public function create(array $attributes, string $message = null, bool $returnObject = false)
     {
         try {
             $model = $this->getModelClassName()::create($this->optimizeAttributes($attributes));
@@ -91,7 +91,7 @@ abstract class CRUDServices
                 return $model;
             }
 
-            return $this->successResponse($message, [], 201);
+            return $this->successResponse($message ?? $this->getModelClassName().' created successfully', [], 201);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -100,17 +100,14 @@ abstract class CRUDServices
     /**
      * Creates a new model from the given parent relationship.
      *
-     * @param  array  $attributes
-     * @param  string  $message
-     * @param  bool  $returnObject
+     * @param array $attributes
+     * @param string $message
+     * @param bool $returnObject
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function createFromParent(
-        array $attributes,
-        string $message = 'Created successfully!',
-        bool $returnObject = false
-    ) {
+    public function createFromParent(array $attributes, string $message = null, bool $returnObject = false)
+    {
         $class = $this->getModelClassName();
         $model = new $class($this->optimizeAttributes($attributes));
 
@@ -120,7 +117,7 @@ abstract class CRUDServices
                 return $model;
             }
 
-            return $this->successResponse($message, [], 201);
+            return $this->successResponse($message ?? $this->getModelClassName().' created successfully', [], 201);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -129,7 +126,7 @@ abstract class CRUDServices
     /**
      * This removes unwanted fields from the incoming create/update requests.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      *
      * @return array
      */
