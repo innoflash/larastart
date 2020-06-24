@@ -43,7 +43,7 @@ abstract class CRUDServices
                 return '';
             }
 
-            return $this->successResponse($message ?? $this->getModelClassName().' deleted successfully', [], 204);
+            return $this->successResponse($message ?? $this->getModelClassName(true).' deleted successfully', [], 204);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -67,7 +67,7 @@ abstract class CRUDServices
                 return $this->getServiceVariable()->refresh();
             }
 
-            return $this->successResponse($message ?? $this->getModelClassName().' updated successfully');
+            return $this->successResponse($message ?? $this->getModelClassName(true).' updated successfully');
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -91,7 +91,7 @@ abstract class CRUDServices
                 return $model;
             }
 
-            return $this->successResponse($message ?? $this->getModelClassName().' created successfully', [], 201);
+            return $this->successResponse($message ?? $this->getModelClassName(true).' created successfully', [], 201);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -117,7 +117,7 @@ abstract class CRUDServices
                 return $model;
             }
 
-            return $this->successResponse($message ?? $this->getModelClassName().' created successfully', [], 201);
+            return $this->successResponse($message ?? $this->getModelClassName(true).' created successfully', [], 201);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -165,10 +165,18 @@ abstract class CRUDServices
     /**
      * Return the class name of the service main model.
      *
+     * Returns class base name if shortened.
+     *
+     * @param bool $shortened
+     *
      * @return string
      */
-    protected function getModelClassName(): string
+    protected function getModelClassName(bool $shortened = false): string
     {
+        if ($shortened) {
+            return class_basename($this->getServiceVariable());
+        }
+
         return get_class($this->getServiceVariable());
     }
 
@@ -180,7 +188,7 @@ abstract class CRUDServices
     private function getServiceVariable()
     {
         return collect(get_object_vars($this))
-            ->reject(fn ($var) => ! ($var instanceof Model))
+            ->reject(fn($var) => ! ($var instanceof Model))
             ->filter(function ($var, $key) {
                 return Str::contains('get'.Str::ucfirst($key), get_class_methods($this))
                     && Str::startsWith(Str::lower(class_basename($this)), $key);
