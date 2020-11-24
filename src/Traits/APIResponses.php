@@ -15,7 +15,7 @@ trait APIResponses
      *
      * @return mixed
      */
-    public function successResponse($message, array $data = [], int $statusCode = 200)
+    public function successResponse($message, $data = [], int $statusCode = 200)
     {
         $responseData = [
             'success' => true,
